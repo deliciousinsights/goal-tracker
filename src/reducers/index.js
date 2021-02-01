@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 
+import config from './config'
 import currentUser from './currentUser'
 import goals from './goals'
 import history from './history'
@@ -7,6 +8,7 @@ import today from './today'
 import todaysProgress from './todaysProgress'
 
 const goalTrackerReducer = combineReducers({
+  config,
   currentUser,
   goals,
   history,
