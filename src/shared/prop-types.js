@@ -5,7 +5,16 @@ import {
   keysOf,
   nonNegativeInteger,
 } from 'airbnb-prop-types'
-import { arrayOf, bool, exact, func, node, objectOf, string } from 'prop-types'
+import {
+  arrayOf,
+  bool,
+  exact,
+  func,
+  node,
+  objectOf,
+  oneOf,
+  string,
+} from 'prop-types'
 
 export { arrayOf, bool, exact, func, node, nonNegativeInteger, string }
 
@@ -17,6 +26,13 @@ export const GoalPropType = exact({
   target: positiveInteger.isRequired,
   units: string.isRequired,
 })
+
+export const LoginStatePropType = oneOf([
+  'logged-out',
+  'pending',
+  'logged-in',
+  'failure',
+])
 
 export const TodaysProgressPropType = and([
   keysOf(string),

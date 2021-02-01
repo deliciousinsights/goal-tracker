@@ -62,8 +62,15 @@ const DEFAULT_STATE = {
   ],
 }
 
+const devToolsEnhancer =
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__
+    ? window.__REDUX_DEVTOOLS_EXTENSION__()
+    : (x) => x
+
 export function makeStore(initialState = DEFAULT_STATE) {
-  const store = createStore(goalTrackerReducer, initialState)
+  const enhancer = devToolsEnhancer
+
+  const store = createStore(goalTrackerReducer, initialState, enhancer)
 
   if (module.hot) {
     module.hot.accept('./reducers', () => {
