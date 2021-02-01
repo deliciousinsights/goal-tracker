@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
 
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
@@ -16,6 +17,10 @@ import GoalTrackerWidget from './GoalTrackerWidget'
 import { progressOnGoal } from '../reducers/todaysProgress'
 
 export default function TrackerScreen() {
+  useEffect(() => {
+    document.title = 'Mes objectifs du jour'
+  }, [])
+
   const { goals, today, todaysProgress } = useSelector(selectState)
   const dispatch = useDispatch()
 
