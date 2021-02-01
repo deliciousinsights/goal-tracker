@@ -1,0 +1,56 @@
+{
+  // See http://go.microsoft.com/fwlink/?LinkId=827846
+  // for the documentation about the extensions.json format
+  "recommendations": [
+    // advanced-new-file
+    "patbenatar.advanced-new-file",
+    // All Autocomplete
+    "atishay-jain.all-autocomplete",
+    // Auto Close Tag
+    "formulahendry.auto-close-tag",
+    // Auto Rename Tag
+    "formulahendry.auto-rename-tag",
+    // Bookmarks
+    "alefragnani.bookmarks",
+    // ECMAScript Quotes Transformer
+    "vilicvane.es-quotes",
+    // ESLint
+    "dbaeumer.vscode-eslint",
+    // French Language Pack for VS Code
+    "ms-ceintl.vscode-language-pack-fr",
+    // JavaScript (ES6) code snippets
+    "xabikos.javascriptsnippets",
+    // Jest
+    "Orta.vscode-jest",
+    // Markdown All in One
+    "yzhang.markdown-all-in-one",
+    // Markdown Preview Github Style
+    "bierner.markdown-preview-github-styles",
+    // markdownlint
+    "DavidAnson.vscode-markdownlint",
+    // nbsp-vscode
+    "possan.nbsp-vscode",
+    // npm
+    "eg2.vscode-npm-script",
+    // Path Intellisense
+    "christian-kohler.path-intellisense",
+    // Prettier - JavaScript formatter
+    "esbenp.prettier-vscode",
+    // REST Client
+    "humao.rest-client",
+    // Rewrap
+    "stkb.rewrap",
+    // Search node_modules
+    "jasonnutter.search-node-modules",
+    // sort-imports
+    "amatiasq.sort-imports",
+    // Subword navigation
+    "ow.vscode-subword-navigation",
+    // Visual Studio Intellicode
+    "visualstudioexptteam.vscodeintellicode",
+    // vscode-styled-components
+    "styled-components.vscode-styled-components",
+    // VSCode Great Icons
+    "emmanuelbeziat.vscode-great-icons"
+  ]
+}

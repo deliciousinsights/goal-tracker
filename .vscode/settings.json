@@ -1,0 +1,54 @@
+{
+  // Nicer debugging (experimental)
+  "debug.inlineValues": true,
+
+  // Font and spacing (even w/o Prettier/ESLint)
+  "editor.fontFamily": "'Operator Mono SSm', 'Source Code Pro', Monaco, Menlo, Consolas, 'Droid Sans Mono', Inconsolata, 'Courier New', monospace",
+  "editor.insertSpaces": true,
+  "editor.minimap.enabled": false,
+  "editor.multiCursorModifier": "alt",
+  "editor.scrollBeyondLastLine": false,
+  "editor.snippetSuggestions": "top",
+  "editor.tabSize": 2,
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+
+  // Hide Open Editors pane
+  "explorer.openEditors.visible": 0,
+
+  // Disable Preview when using Quick Open
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+
+  // Use cool icon theme
+  "workbench.iconTheme": "vscode-great-icons",
+
+  // `.snap` files (Jest snapshots) should use JSX mode by default
+  "files.associations": {
+    "*.snap": "javascriptreact"
+  },
+
+  // Exclusions from the explorer
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true
+  },
+  "prettier.arrowParens": "always",
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "es5",
+  "prettier.semi": false,
+  "editor.formatOnSave": true,
+  "javascript.format.enable": false,
+
+  // Flow
+  "flow.useNPMPackagedFlow": true,
+  "javascript.validate.enable": false,
+
+  // Emmet
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  "emmet.triggerExpansionOnTab": true,
+
+  "jest.autoRun": "off"
+}
