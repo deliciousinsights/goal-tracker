@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
 
 import ArrowForward from '@material-ui/icons/ArrowForward'
@@ -7,6 +7,7 @@ import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import CardHeader from '@material-ui/core/CardHeader'
+import Snackbar from '@material-ui/core/Snackbar'
 import TextField from '@material-ui/core/TextField'
 
 import classes from './LoginScreen.module.css'
@@ -17,7 +18,19 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const loginState = useSelector(selectLoginState)
   const dispatch = useDispatch()
+
+  const loggingIn = loginState === 'pending'
+  const logInIcon = loggingIn ? null : <ArrowForward />
+  const canLogIn = !loggingIn && email && password
+
+  const snackBar =
+    loginState === 'failure' ? (
+      <Snackbar message='Identifiant ou mot de passe invalide' open />
+    ) : (
+      ''
+    )
 
   return (
     <form onSubmit={handleSubmit}>
@@ -53,7 +66,8 @@ export default function LoginScreen() {
         <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
           <Button
             color='primary'
-            startIcon={<ArrowForward />}
+            disabled={!canLogIn}
+            startIcon={logInIcon}
             type='submit'
             variant='contained'
           >
@@ -61,6 +75,7 @@ export default function LoginScreen() {
           </Button>
         </CardActions>
       </Card>
+      {snackBar}
     </form>
   )
 
@@ -68,4 +83,7 @@ export default function LoginScreen() {
     event.preventDefault()
     dispatch(logIn(email, password))
   }
+}
+function selectLoginState(state) {
+  return state.currentUser.loginState
 }

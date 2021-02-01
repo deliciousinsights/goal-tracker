@@ -79,7 +79,10 @@ Regular.propTypes = {
 }
 
 function WrappedTrackerScreen({ goals, today, todaysProgress }) {
-  const store = makeStore({ goals, today, todaysProgress })
+  const store = makeStore(
+    { goals, today, todaysProgress },
+    { shouldPersist: false }
+  )
   return (
     <Provider store={store}>
       <TrackerScreen />

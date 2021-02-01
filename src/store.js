@@ -1,4 +1,5 @@
-import { createStore } from 'redux'
+import { compose, createStore } from 'redux'
+import { offline } from '@redux-offline/redux-offline'
 import { subDays } from 'date-fns'
 
 import goalTrackerReducer from './reducers'
@@ -67,8 +68,15 @@ const devToolsEnhancer =
     ? window.__REDUX_DEVTOOLS_EXTENSION__()
     : (x) => x
 
-export function makeStore(initialState = DEFAULT_STATE) {
-  const enhancer = devToolsEnhancer
+export function makeStore(
+  initialState = DEFAULT_STATE,
+  { shouldPersist = process.env.NODE_ENV !== 'test' } = {}
+) {
+  const enhancers = [devToolsEnhancer]
+  if (shouldPersist) {
+    enhancers.unshift(offline())
+  }
+  const enhancer = compose(...enhancers)
 
   const store = createStore(goalTrackerReducer, initialState, enhancer)
 

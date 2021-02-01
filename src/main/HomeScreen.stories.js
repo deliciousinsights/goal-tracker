@@ -25,11 +25,14 @@ export const LoggedIn = () => <WrappedHomeScreen loggedIn />
 export const LoggedOut = () => <WrappedHomeScreen loggedIn={false} />
 
 function WrappedHomeScreen({ loggedIn }) {
-  const store = makeStore({
-    currentUser: { loginState: loggedIn ? 'logged-in' : 'logged-out' },
-    goals: [goal],
-    todaysProgress: { [goal.id]: 2 },
-  })
+  const store = makeStore(
+    {
+      currentUser: { loginState: loggedIn ? 'logged-in' : 'logged-out' },
+      goals: [goal],
+      todaysProgress: { [goal.id]: 2 },
+    },
+    { shouldPersist: false }
+  )
   return (
     <Provider store={store}>
       <HomeScreen />
