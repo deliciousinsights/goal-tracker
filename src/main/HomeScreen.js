@@ -1,6 +1,9 @@
 import LoginScreen from '../auth/LoginScreen'
+import store from '../store'
+import TrackerScreen from './TrackerScreen'
 
 export default function HomeScreen() {
-  // Vos modifs ici
-  return <LoginScreen />
+  const loggedIn = store.currentUser.loginState === 'logged-in'
+
+  return loggedIn ? <TrackerScreen /> : <LoginScreen />
 }
