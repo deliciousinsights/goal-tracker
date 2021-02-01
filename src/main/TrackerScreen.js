@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Button from '@mui/material/Button'
@@ -37,12 +38,19 @@ export default function TrackerScreen() {
       <CardActions>
         <Button
           color='secondary'
+          component={Link}
           startIcon={<HistoryIcon />}
+          to='/history'
           variant='contained'
         >
           Historique
         </Button>
-        <Button startIcon={<SettingsIcon />} variant='contained'>
+        <Button
+          component={Link}
+          startIcon={<SettingsIcon />}
+          to='/settings'
+          variant='contained'
+        >
           Paramètres
         </Button>
       </CardActions>
