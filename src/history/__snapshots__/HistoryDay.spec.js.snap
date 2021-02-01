@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<HistoryDay /> should otherwise match the expected snapshot 1`] = `
+<div>
+  <div>
+    <hr
+      class="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
+    />
+    <ul
+      class="MuiList-root MuiList-padding css-h4y409-MuiList-root"
+    >
+      <h6
+        class="MuiTypography-root MuiTypography-subtitle1 css-10wpov9-MuiTypography-root"
+      >
+        jeudi 23 mars 2017
+      </h6>
+    </ul>
+  </div>
+</div>
+`;
