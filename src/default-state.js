@@ -4,8 +4,8 @@ import { isoDate } from './lib/helpers'
 
 const DEFAULT_STATE = {
   currentUser: {
-    // loginState: 'logged-in',
-    // email: 'christophe@delicious-insights.com',
+    loginState: 'logged-in',
+    email: 'christophe@delicious-insights.com',
   },
   goals: [
     {
