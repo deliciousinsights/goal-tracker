@@ -1,12 +1,14 @@
+import { createStore } from 'redux'
 import { subDays } from 'date-fns'
 
+import goalTrackerReducer from './reducers'
 import { isoDate } from './lib/helpers'
 
-const state = {
-  currentUser: {
-    loginState: 'logged-in',
-    email: 'christophe@delicious-insights.com',
-  },
+const DEFAULT_STATE = {
+  // currentUser: {
+  //   loginState: 'logged-in',
+  //   email: 'christophe@delicious-insights.com',
+  // },
   goals: [
     {
       id: '5bf57a79890a6e2c11ec9665',
@@ -60,4 +62,18 @@ const state = {
   ],
 }
 
-export default state
+export function makeStore(initialState = DEFAULT_STATE) {
+  const store = createStore(goalTrackerReducer, initialState)
+
+  if (module.hot) {
+    module.hot.accept('./reducers', () => {
+      store.replaceReducer(goalTrackerReducer)
+    })
+  }
+
+  return store
+}
+
+const store = makeStore()
+
+export default store
