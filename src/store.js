@@ -1,5 +1,6 @@
-import { compose, createStore } from 'redux'
+import { applyMiddleware, compose, createStore } from 'redux'
 import { offline } from '@redux-offline/redux-offline'
+import reduxPromiseMW from 'redux-promise-middleware'
 import { subDays } from 'date-fns'
 
 import goalTrackerReducer from './reducers'
@@ -72,7 +73,7 @@ export function makeStore(
   initialState = DEFAULT_STATE,
   { shouldPersist = process.env.NODE_ENV !== 'test' } = {}
 ) {
-  const enhancers = [devToolsEnhancer]
+  const enhancers = [applyMiddleware(reduxPromiseMW), devToolsEnhancer]
   if (shouldPersist) {
     enhancers.unshift(offline())
   }

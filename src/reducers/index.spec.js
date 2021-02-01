@@ -18,7 +18,11 @@ describe('Store-level reducer', () => {
   it('should properly accrue its initial state', () => {
     const initialState = undefined
     const expectedState = {
-      config: { rehydrated: false },
+      config: {
+        canNotify: false,
+        canPromptForNotify: false,
+        rehydrated: false,
+      },
       currentUser: { loginState: 'logged-out' },
       goals: [],
       history: [],
@@ -31,7 +35,11 @@ describe('Store-level reducer', () => {
 
   it('should handle day closing', () => {
     const initialState = {
-      config: { rehydrated: false },
+      config: {
+        canNotify: false,
+        canPromptForNotify: false,
+        rehydrated: false,
+      },
       currentUser: { loginState: 'logged-out' },
       goals: [
         { id: 1, target: 42 },
@@ -47,7 +55,11 @@ describe('Store-level reducer', () => {
       todaysProgress: { 1: 10 },
     }
     const expectedState = {
-      config: { rehydrated: false },
+      config: {
+        canNotify: false,
+        canPromptForNotify: false,
+        rehydrated: false,
+      },
       currentUser: initialState.currentUser,
       goals: initialState.goals,
       history: [
