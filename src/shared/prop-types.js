@@ -5,9 +5,27 @@ import {
   keysOf,
   nonNegativeInteger,
 } from 'airbnb-prop-types'
-import { arrayOf, bool, exact, func, node, objectOf, string } from 'prop-types'
+import {
+  arrayOf,
+  bool,
+  exact,
+  func,
+  node,
+  objectOf,
+  oneOfType,
+  string,
+} from 'prop-types'
 
-export { arrayOf, bool, exact, func, node, nonNegativeInteger, string }
+export {
+  arrayOf,
+  bool,
+  exact,
+  func,
+  node,
+  nonNegativeInteger,
+  oneOfType,
+  string,
+}
 
 export const positiveInteger = and([integer(), between({ gt: 0 })])
 
