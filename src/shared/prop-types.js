@@ -14,6 +14,7 @@ import {
   node,
   objectOf,
   oneOf,
+  oneOfType,
   string,
 } from 'prop-types'
 
@@ -25,6 +26,7 @@ export {
   func,
   node,
   nonNegativeInteger,
+  oneOfType,
   string,
 }
 
