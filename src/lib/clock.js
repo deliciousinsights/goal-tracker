@@ -1,3 +1,5 @@
+import { addSeconds, differenceInCalendarDays, parseISO } from 'date-fns'
+
 import { closeDay } from '../reducers/closeDay'
 import store from '../store'
 
@@ -18,13 +20,28 @@ if (module.hot) {
   })
 }
 
+const HISTORY_TRIGGER_TIME =
+  process.env.NODE_ENV === 'production'
+    ? '00:00:00'
+    : STAMP_FORMATTER.format(addSeconds(new Date(), 5))
+
 function checkClock() {
   const now = STAMP_FORMATTER.format(new Date())
-  console.log('checking', now)
 
-  // Votre code ici
+  if (now === HISTORY_TRIGGER_TIME) {
+    store.dispatch(closeDay())
+  }
 }
 
 function checkForTodaysFirstUse() {
-  // Votre code ici
+  const unsub = store.subscribe(() => {
+    if (store.getState().config.rehydrated) {
+      unsub()
+
+      const storesLastDay = parseISO(store.getState().today)
+      if (differenceInCalendarDays(storesLastDay, new Date()) < 0) {
+        store.dispatch(closeDay())
+      }
+    }
+  })
 }
