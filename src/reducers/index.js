@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import reduceReducers from 'reduce-reducers'
 
 import config from './config'
 import currentUser from './currentUser'
@@ -8,7 +9,7 @@ import reduceCloseDay from './closeDay'
 import today from './today'
 import todaysProgress from './todaysProgress'
 
-const goalTrackerReducer = combineReducers({
+const coreReducer = combineReducers({
   config,
   currentUser,
   goals,
@@ -16,5 +17,7 @@ const goalTrackerReducer = combineReducers({
   today,
   todaysProgress,
 })
+
+const goalTrackerReducer = reduceReducers(coreReducer, reduceCloseDay)
 
 export default goalTrackerReducer
