@@ -1,5 +1,6 @@
 import { addSeconds, differenceInCalendarDays, parseISO } from 'date-fns'
 
+import clockIcon from '../icons/clock-reset.png'
 import { closeDay } from '../reducers/closeDay'
 import store from '../store'
 
@@ -29,7 +30,7 @@ function checkClock() {
   const now = STAMP_FORMATTER.format(new Date())
 
   if (now === HISTORY_TRIGGER_TIME) {
-    store.dispatch(closeDay())
+    closePreviousDay()
   }
 }
 
@@ -44,7 +45,26 @@ function checkForTodaysFirstUse() {
 
     const storesLastDay = parseISO(today)
     if (differenceInCalendarDays(storesLastDay, new Date()) < 0) {
-      store.dispatch(closeDay())
+      closePreviousDay()
     }
   })
+}
+
+function closePreviousDay() {
+  store.dispatch(closeDay())
+
+  notify({
+    title: 'Fin de journée !',
+    text: 'Vos objectifs ont été historisés et repartent à zéro.',
+    icon: clockIcon,
+    secondsVisible: 4,
+  })
+}
+
+function notify({ title, text, icon, secondsVisible = 0 }) {
+  if (!store.getState().config.canNotify) {
+    return
+  }
+
+  const notif = '???' // Votre code ici en remplacement
 }
