@@ -1,0 +1,15 @@
+.goalTracker .goal {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin-bottom: 1em;
+}
+.goalTracker .summary {
+  flex-grow: 1;
+}
+.goalTracker .cta {
+  margin: auto 0 0.25em 0.5em;
+}
+.goalTracker h2 {
+  margin-bottom: 0.2em;
+}
