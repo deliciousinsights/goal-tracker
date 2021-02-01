@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
@@ -12,9 +12,11 @@ import classes from './TrackerScreen.module.css'
 import { formatDate, getDayCounts } from '../lib/helpers'
 import Gauge from '../shared/Gauge'
 import GoalTrackerWidget from './GoalTrackerWidget'
+import { progressOnGoal } from '../reducers/todaysProgress'
 
 export default function TrackerScreen() {
   const { goals, today, todaysProgress } = useSelector(selectState)
+  const dispatch = useDispatch()
 
   return (
     <Card className={classes.goalTracker}>
@@ -27,6 +29,7 @@ export default function TrackerScreen() {
           <GoalTrackerWidget
             goal={goal}
             key={goal.id}
+            onProgress={markGoalProgression}
             progress={todaysProgress[goal.id] || 0}
           />
         ))}
@@ -45,6 +48,10 @@ export default function TrackerScreen() {
       </CardActions>
     </Card>
   )
+
+  function markGoalProgression({ id }) {
+    dispatch(progressOnGoal({ goalId: id }))
+  }
 
   function overallProgress() {
     const { totalProgress, totalTarget } = getDayCounts(todaysProgress, goals)
