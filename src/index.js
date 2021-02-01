@@ -8,6 +8,8 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
+import './lib/clock'
+
 const container = document.getElementById('root')
 const root = createRoot(container)
 root.render(
