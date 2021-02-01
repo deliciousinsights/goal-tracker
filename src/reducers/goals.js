@@ -19,10 +19,12 @@ export default function reduceGoals(state = [], action) {
     }
 
     case REMOVE_GOAL:
-    // Votre code ici
+      return state.filter(({ id }) => id !== action.payload.id)
 
     case UPDATE_GOAL: {
-      // Votre code ici
+      return state.map((goal) =>
+        goal.id === action.payload.id ? action.payload : goal
+      )
     }
 
     default:
