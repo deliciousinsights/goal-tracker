@@ -1,5 +1,6 @@
 import { number } from 'prop-types'
 import { Provider } from 'react-redux'
+import { MemoryRouter as Router } from 'react-router-dom'
 
 import {
   arrayOf,
@@ -84,9 +85,11 @@ function WrappedTrackerScreen({ goals, today, todaysProgress }) {
     { shouldPersist: false }
   )
   return (
-    <Provider store={store}>
-      <TrackerScreen />
-    </Provider>
+    <Router>
+      <Provider store={store}>
+        <TrackerScreen />
+      </Provider>
+    </Router>
   )
 }
 WrappedTrackerScreen.propTypes = {

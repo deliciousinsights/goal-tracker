@@ -11,9 +11,13 @@ import store from './store'
 export default function App() {
   return (
     <Provider store={store}>
-      <RehydrationWaiter>
-        <HomeScreen />
-      </RehydrationWaiter>
+      <Router>
+        <RehydrationWaiter>
+          <Route exact path='/' component={HomeScreen} />
+          <PrivateRoute exact path='/settings' component={SettingsScreen} />
+          <PrivateRoute exact path='/history' component={HistoryScreen} />
+        </RehydrationWaiter>
+      </Router>
     </Provider>
   )
 }

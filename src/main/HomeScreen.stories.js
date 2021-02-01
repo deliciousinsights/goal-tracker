@@ -1,4 +1,5 @@
 import { Provider } from 'react-redux'
+import { MemoryRouter as Router } from 'react-router-dom'
 
 import { bool } from '../shared/prop-types'
 import HomeScreen from './HomeScreen'
@@ -34,9 +35,11 @@ function WrappedHomeScreen({ loggedIn }) {
     { shouldPersist: false }
   )
   return (
-    <Provider store={store}>
-      <HomeScreen />
-    </Provider>
+    <Router>
+      <Provider store={store}>
+        <HomeScreen />
+      </Provider>
+    </Router>
   )
 }
 WrappedHomeScreen.propTypes = {
