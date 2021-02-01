@@ -1,3 +1,5 @@
+import ObjectID from 'bson-objectid'
+
 // Types d’actions
 // ---------------
 
@@ -11,7 +13,9 @@ const UPDATE_GOAL = 'goal-tracker/goals/GOALS_UPDATE'
 export default function reduceGoals(state = [], action) {
   switch (action.type) {
     case ADD_GOAL: {
-      // Votre code ici
+      const { name, target, units } = action.payload
+      const id = ObjectID().toHexString()
+      return [...state, { id, name, target, units }]
     }
 
     case REMOVE_GOAL:
