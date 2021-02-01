@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux'
+
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
@@ -10,10 +12,10 @@ import classes from './TrackerScreen.module.css'
 import { formatDate, getDayCounts } from '../lib/helpers'
 import Gauge from '../shared/Gauge'
 import GoalTrackerWidget from './GoalTrackerWidget'
-import store from '../store'
 
 export default function TrackerScreen() {
-  const { goals, today, todaysProgress } = store
+  const { goals, today, todaysProgress } = useSelector(selectState)
+
   return (
     <Card className={classes.goalTracker}>
       <CardHeader
@@ -48,5 +50,13 @@ export default function TrackerScreen() {
     const { totalProgress, totalTarget } = getDayCounts(todaysProgress, goals)
 
     return { value: totalProgress, max: totalTarget }
+  }
+}
+
+function selectState({ goals, today, todaysProgress }) {
+  return {
+    goals,
+    today,
+    todaysProgress,
   }
 }
