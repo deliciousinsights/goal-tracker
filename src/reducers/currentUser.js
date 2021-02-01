@@ -4,8 +4,20 @@ import { createAction, createReducer } from '@reduxjs/toolkit'
 // ---------------
 
 export function logIn({ email, password }) {
-  // FIXME: Update this!
-  return { type: logInStart }
+  return {
+    type: logInStart.toString(),
+    meta: {
+      offline: {
+        effect: {
+          json: { email, password },
+          method: 'POST',
+          url: `http://${window.location.hostname}:3001/api/v1/sessions`,
+        },
+        commit: { type: logInSuccess.toString() },
+        rollback: { type: logInFailure.toString() },
+      },
+    },
+  }
 }
 
 export const logInStart = createAction('goal-tracker/currentUser/logInStart')
