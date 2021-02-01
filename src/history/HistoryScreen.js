@@ -30,13 +30,24 @@ export default function HistoryScreen() {
       <Card className='history'>
         <CardHeader title='Historique' />
         <CardContent>
-          <Typography>Coming soon: history</Typography>
+          {history.map((dayStats) => (
+            <HistoryDay goals={goals} key={dayStats.date} stats={dayStats} />
+          ))}
+          {history.length === 0 && (
+            <Typography>Aucun historique disponible</Typography>
+          )}
         </CardContent>
-        <CardActions>
-          <Button startIcon={<ClearIcon />} variant='contained'>
-            Effacer
-          </Button>
-        </CardActions>
+        {history.length > 0 && (
+          <CardActions>
+            <Button
+              onClick={() => dispatch(clearHistory())}
+              startIcon={<ClearIcon />}
+              variant='contained'
+            >
+              Effacer
+            </Button>
+          </CardActions>
+        )}
       </Card>
     </>
   )
