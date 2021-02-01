@@ -9,6 +9,7 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import classes from './TrackerScreen.module.css'
 import { formatDate, getDayCounts } from '../lib/helpers'
 import Gauge from '../shared/Gauge'
+import GoalTrackerWidget from './GoalTrackerWidget'
 import store from '../store'
 
 export default function TrackerScreen() {
@@ -19,7 +20,15 @@ export default function TrackerScreen() {
         subheader={<Gauge {...overallProgress()} />}
         title={formatDate(today, 'medium')}
       />
-      <CardContent>FIXME</CardContent>
+      <CardContent>
+        {goals.map((goal) => (
+          <GoalTrackerWidget
+            goal={goal}
+            key={goal.id}
+            progress={todaysProgress[goal.id] || 0}
+          />
+        ))}
+      </CardContent>
       <CardActions>
         <Button
           color='secondary'

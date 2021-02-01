@@ -7,7 +7,10 @@ import classes from './TrackerScreen.module.css'
 import { func, GoalPropType, nonNegativeInteger } from '../shared/prop-types'
 import Gauge from '../shared/Gauge'
 
-export default function GoalTrackerWidget({ FIXME }) {
+export default function GoalTrackerWidget({
+  goal: { name, units, target },
+  progress,
+}) {
   const adderComponent =
     target > progress ? (
       <Fab color='secondary' size='small' aria-label={`Progresser sur ${name}`}>
