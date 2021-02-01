@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import ArrowForward from '@material-ui/icons/ArrowForward'
 import Button from '@material-ui/core/Button'
@@ -15,6 +15,10 @@ import { logIn } from '../reducers/currentUser'
 import TogglablePasswordField from './TogglablePasswordField'
 
 export default function LoginScreen() {
+  useEffect(() => {
+    document.title = 'Identifiez-vous'
+  }, [])
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
