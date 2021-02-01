@@ -1,4 +1,9 @@
-import reducer, { logIn, logOut } from './currentUser'
+import reducer, {
+  logInFailure,
+  logInStart,
+  logInSuccess,
+  logOut,
+} from './currentUser'
 
 describe('Current User reducer', () => {
   it('should return its initial state', () => {
@@ -8,14 +13,22 @@ describe('Current User reducer', () => {
     expect(reducer(initialState, {})).toEqual(expectedState)
   })
 
-  it('should handle login', () => {
-    const email = 'john@example.com'
+  it('should handle login steps', () => {
     const initialState = { loginState: 'logged-out' }
-    const expectedState = { loginState: 'logged-in', email }
+    const email = 'john@example.com'
 
-    expect(
-      reducer(initialState, logIn({ email, password: 'no fate' }))
-    ).toEqual(expectedState)
+    expect(reducer(initialState, logInStart())).toEqual({
+      loginState: 'pending',
+    })
+
+    expect(reducer(initialState, logInSuccess({ email }))).toEqual({
+      loginState: 'logged-in',
+      email,
+    })
+
+    expect(reducer(initialState, logInFailure())).toEqual({
+      loginState: 'failure',
+    })
   })
 
   it('should handle logout', () => {

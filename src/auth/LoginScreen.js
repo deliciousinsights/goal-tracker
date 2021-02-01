@@ -7,6 +7,7 @@ import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
+import Snackbar from '@mui/material/Snackbar'
 import TextField from '@mui/material/TextField'
 
 import classes from './LoginScreen.module.css'
@@ -18,8 +19,19 @@ const MIN_PASSWORD_LENGTH = 6
 export default function LoginScreen() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const canLogIn = email !== '' && password.trim().length >= MIN_PASSWORD_LENGTH
+  const loginState = useSelector((state) => state.currentUser.loginState)
+  const loggingIn = loginState === 'pending'
+  const logInIcon = loggingIn ? null : <ArrowForward />
+  const canLogIn =
+    !loggingIn && email !== '' && password.trim().length >= MIN_PASSWORD_LENGTH
   const dispatch = useDispatch()
+
+  const snackBar =
+    loginState === 'failure' ? (
+      <Snackbar message='Identifiant ou mot de passe invalide' open />
+    ) : (
+      ''
+    )
 
   return (
     <form onSubmit={handleSubmit}>
@@ -57,7 +69,7 @@ export default function LoginScreen() {
           <Button
             color='primary'
             disabled={!canLogIn}
-            startIcon={<ArrowForward />}
+            startIcon={logInIcon}
             type='submit'
             variant='contained'
           >
@@ -65,6 +77,7 @@ export default function LoginScreen() {
           </Button>
         </CardActions>
       </Card>
+      {snackBar}
     </form>
   )
 
