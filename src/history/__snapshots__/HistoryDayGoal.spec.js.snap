@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<HistoryDayGoal /> should otherwise match the expected snapshot 1`] = `
+<div>
+  <li
+    class="MuiListItem-root MuiListItem-gutters"
+  >
+    <div
+      class="MuiListItemText-root MuiListItemText-multiline"
+      component="div"
+    >
+      <span
+        class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
+      >
+        Demo goal
+      </span>
+      <div
+        class="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
+      >
+        <div>
+          <div
+            aria-valuemax="100"
+            aria-valuemin="0"
+            aria-valuenow="40"
+            class="MuiLinearProgress-root MuiLinearProgress-colorPrimary MuiLinearProgress-determinate"
+            role="progressbar"
+            style="height: 8px;"
+          >
+            <div
+              class="MuiLinearProgress-bar MuiLinearProgress-barColorPrimary MuiLinearProgress-bar1Determinate"
+              style="transform: translateX(-60%);"
+            />
+          </div>
+          2
+           
+          wombats
+           sur 
+          5
+        </div>
+      </div>
+    </div>
+  </li>
+</div>
+`;
