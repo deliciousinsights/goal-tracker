@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import Add from '@mui/icons-material/Add'
 import ArrowBack from '@mui/icons-material/ArrowBack'
@@ -23,10 +23,14 @@ import GoalSetting from './GoalSetting'
 import { logOut } from '../reducers/currentUser'
 import { removeGoal } from '../reducers/goals'
 
+const DEFAULT_STATE = { goal: {}, dialog: null }
+
 export default function SettingsScreen() {
   useEffect(() => {
     document.title = 'Mes paramètres'
   }, [])
+
+  const [{ goal, dialog }, setState] = useState(DEFAULT_STATE)
 
   const { goals, email } = useSelector(selectState)
   const dispatch = useDispatch()
@@ -56,7 +60,11 @@ export default function SettingsScreen() {
           <List>
             <Typography variant='subtitle1'>Mes objectifs</Typography>
             {goals.map((goal) => (
-              <GoalSetting goal={goal} key={goal.id} />
+              <GoalSetting
+                goal={goal}
+                key={goal.id}
+                onDeleteClick={openGoalDeleter}
+              />
             ))}
             {goals.length === 0 && (
               <ListItem>
@@ -71,8 +79,32 @@ export default function SettingsScreen() {
           </Button>
         </CardActions>
       </Card>
+      <DeleteSettingDialog
+        goal={goal}
+        onCancel={closeDialogs}
+        onClosed={resetGoal}
+        onDelete={deleteSelectedGoal}
+        open={dialog === 'delete'}
+      />
     </>
   )
+
+  function closeDialogs() {
+    setState({ goal, dialog: null })
+  }
+
+  function deleteSelectedGoal() {
+    dispatch(removeGoal({ id: goal.id }))
+    closeDialogs()
+  }
+
+  function openGoalDeleter(goal) {
+    setState({ goal, dialog: 'delete' })
+  }
+
+  function resetGoal() {
+    setState(DEFAULT_STATE)
+  }
 }
 
 function selectState({ goals, currentUser: { email } }) {
