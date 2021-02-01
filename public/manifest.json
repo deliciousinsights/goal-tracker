@@ -1,0 +1,54 @@
+{
+  "short_name": "Goal Tracker",
+  "name": "Goal Tracker",
+  "description": "Une appli fil rouge de substrat pour la formation Web Apps Modernes par Delicious Insights.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "shortcuts": [
+    {
+      "name": "Consulter l’historique",
+      "short_name": "Historique",
+      "description": "Affiche l’historique des journées ayant affiché une progression.",
+      "url": "/history",
+      "icons": [
+        {
+          "src": "shortcut-history.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Modifier les paramètres",
+      "short_name": "Paramètres",
+      "description": "Affiche l’écran de gestion des objectifs et de déconnexion.",
+      "url": "/settings",
+      "icons": [
+        {
+          "src": "shortcut-settings.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

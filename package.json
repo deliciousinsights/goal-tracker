@@ -1,0 +1,123 @@
+{
+  "name": "goal-tracker",
+  "version": "6.0.0",
+  "private": true,
+  "description": "Demo app used in Delicious Insights’ Modern Web Apps training course",
+  "author": "Christophe Porteneuve <christophe@delicious-insights.com>",
+  "license": "No-License (see LICENSE file)",
+  "scripts": {
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "start": "react-scripts start",
+    "start:poll": "cross-env CHOKIDAR_USEPOLLING=true npm start",
+    "test": "react-scripts test"
+  },
+  "engines": {
+    "node": ">= 14",
+    "npm": ">= 6"
+  },
+  "prettier": {
+    "jsxSingleQuote": true,
+    "semi": false,
+    "singleQuote": true
+  },
+  "deliciousImportSort": {
+    "customGroups": "@mui",
+    "mainOrder": [
+      "absolute",
+      "relative",
+      "bare"
+    ]
+  },
+  "importSort": {
+    ".js": {
+      "style": "delicious"
+    }
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "plugin:import/errors",
+      "plugin:import/warnings"
+    ],
+    "rules": {
+      "react/prop-types": "warn"
+    },
+    "overrides": [
+      {
+        "files": [
+          "src/**/*.stories.js"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/**/*.stories.js"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.2.5",
+    "@mui/material": "^5.2.7",
+    "@redux-offline/redux-offline": "^2.6.0",
+    "airbnb-prop-types": "^2.16.0",
+    "bson-objectid": "^2.0.1",
+    "date-fns": "^2.28.0",
+    "prop-types": "^15.8.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "^5.0.0",
+    "reduce-reducers": "^1.0.4",
+    "redux": "^4.1.2",
+    "redux-promise-middleware": "^6.1.2",
+    "web-vitals": "^2.1.2",
+    "workbox-background-sync": "^6.4.2",
+    "workbox-broadcast-update": "^6.4.2",
+    "workbox-cacheable-response": "^6.4.2",
+    "workbox-core": "^6.4.2",
+    "workbox-expiration": "^6.4.2",
+    "workbox-google-analytics": "^6.4.2",
+    "workbox-navigation-preload": "^6.4.2",
+    "workbox-precaching": "^6.4.2",
+    "workbox-range-requests": "^6.4.2",
+    "workbox-routing": "^6.4.2",
+    "workbox-strategies": "^6.4.2",
+    "workbox-streams": "^6.4.2"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^8.11.1",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "body-parser": "^1.19.1",
+    "chalk-template": "^0.2.0",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
+    "express": "^4.17.2",
+    "import-sort-parser-babylon": "^6.0.0",
+    "import-sort-style-delicious": "^1.0.2",
+    "morgan": "^1.10.0",
+    "npm-run-all": "^4.1.5"
+  }
+}
