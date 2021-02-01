@@ -11,7 +11,7 @@ export default function reduceTodaysProgress(state = {}, action) {
     case PROGRESS: {
       const { goalId, increment } = action.payload
       const previous = state[goalId] || 0
-      return // ???
+      return { ...state, [goalId]: previous + increment }
     }
 
     default:
