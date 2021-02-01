@@ -7,13 +7,16 @@ const LOGOUT = 'goal-tracker/currentUser/AUTH_LOGOUT'
 // Réducteur
 // ---------
 
-export default function reduceCurrentUser(state = null, action) {
+export default function reduceCurrentUser(
+  state = { loginState: 'logged-out' },
+  action
+) {
   switch (action.type) {
     case LOGIN:
-    // Votre code ici
+      return { loginState: 'logged-in', email: action.payload.email }
 
     case LOGOUT:
-    // Votre code ici
+      return { loginState: 'logged-out' }
 
     default:
       return state
@@ -24,9 +27,9 @@ export default function reduceCurrentUser(state = null, action) {
 // ---------------
 
 export function logIn(email, password) {
-  // Votre code ici
+  return { type: LOGIN, payload: { email, password } }
 }
 
 export function logOut() {
-  // Votre code ici
+  return { type: LOGOUT }
 }
