@@ -1,0 +1,47 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "start",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "start:all",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "start:api",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "start:poll",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "storybook",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "test",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "doc",
+      "problemMatcher": []
+    }
+  ]
+}
