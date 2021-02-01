@@ -14,7 +14,11 @@ export const progressOnGoal = createAction(
 // ---------
 
 export default createReducer({}, (builder) => {
-  builder.addCase(progressOnGoal, (state, { payload }) => {
-    // FIXME
-  })
+  builder.addCase(
+    progressOnGoal,
+    (state, { payload: { goalId, increment } }) => {
+      const previous = state[goalId] || 0
+      state[goalId] = previous + increment
+    }
+  )
 })
