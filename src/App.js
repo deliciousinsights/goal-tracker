@@ -1,3 +1,5 @@
+import HomeScreen from './main/HomeScreen'
+
 export default function App() {
-  return <p>Coming soon</p>
+  return <HomeScreen />
 }

@@ -8,7 +8,9 @@
     "eject": "react-scripts eject",
     "start": "react-scripts start",
     "start:poll": "cross-env CHOKIDAR_USEPOLLING=true npm start",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "engines": {
     "node": ">= 14",
