@@ -8,6 +8,7 @@ import {
 import {
   arrayOf,
   bool,
+  elementType,
   exact,
   func,
   node,
@@ -16,7 +17,16 @@ import {
   string,
 } from 'prop-types'
 
-export { arrayOf, bool, exact, func, node, nonNegativeInteger, string }
+export {
+  arrayOf,
+  bool,
+  elementType,
+  exact,
+  func,
+  node,
+  nonNegativeInteger,
+  string,
+}
 
 export const positiveInteger = and([integer(), between({ gt: 0 })])
 
