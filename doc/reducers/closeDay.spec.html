@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="en"><head><title>reducers/closeDay.spec</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="reducers/closeDay.spec"><meta name="groc-project-path" content="src/reducers/closeDay.spec.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/reducers/closeDay.spec.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="historisation-quotidienne-tests">Historisation quotidienne (tests)</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { isoDate } <span class="hljs-keyword">from</span> <span class="hljs-string">'../lib/helpers'</span>
+<span class="hljs-keyword">import</span> reducer, { closeDay } <span class="hljs-keyword">from</span> <span class="hljs-string">'./closeDay'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Le <em>reducer</em> est censé…</p></div></div><div class="code"><div class="wrapper">describe(<span class="hljs-string">'Close Day reducer'</span>, () =&gt; {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="historiser-la-journe-courante">…historiser la journée courante</h2>
+<p>(calcul des données à historiser, ajout en début d’historique,
+réinitialisation des données du jour courant)</p></div></div><div class="code"><div class="wrapper">  it(<span class="hljs-string">'should properly add the current progressions to the history and reset for a new day'</span>, () =&gt; {
+    <span class="hljs-keyword">const</span> initialState = {
+      goals: [
+        { id: <span class="hljs-number">1</span>, target: <span class="hljs-number">5</span> },
+        { id: <span class="hljs-number">2</span>, target: <span class="hljs-number">10</span> },
+        { id: <span class="hljs-number">3</span>, target: <span class="hljs-number">15</span> },
+      ],
+      history: [{ date: <span class="hljs-string">'2017-02-16'</span>, progresses: { <span class="hljs-number">1</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">5</span>] } }],
+      today: <span class="hljs-string">'2017-02-17'</span>,
+      todaysProgress: { <span class="hljs-number">2</span>: <span class="hljs-number">4</span>, <span class="hljs-number">3</span>: <span class="hljs-number">10</span> },
+    }
+
+    <span class="hljs-keyword">const</span> expectedState = {
+      goals: initialState.goals,
+      history: [
+        { date: initialState.today, progresses: { <span class="hljs-number">2</span>: [<span class="hljs-number">4</span>, <span class="hljs-number">10</span>], <span class="hljs-number">3</span>: [<span class="hljs-number">10</span>, <span class="hljs-number">15</span>] } },
+        ...initialState.history,
+      ],
+      today: isoDate(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()),
+      todaysProgress: {},
+    }
+
+    expect(reducer(initialState, closeDay())).toEqual(expectedState)
+  })
+})</div></div></div></div></body></html>

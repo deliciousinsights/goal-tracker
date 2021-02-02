@@ -1,3 +1,11 @@
+// Champ de mot de passe basculable
+// ================================
+//
+// Composant utilitaire ajoutant au champ mot de passe natif un pictogramme de
+// bascule de visibilité de la valeur ; c’est une UI préférable à un champ de
+// confirmation, par exemple, qui permet un contrôle visuel à la demande de la
+// saisie.
+
 import { useState } from 'react'
 
 import IconButton from '@material-ui/core/IconButton'

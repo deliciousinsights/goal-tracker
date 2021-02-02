@@ -1,5 +1,5 @@
-// Store-level (spec reducer)
-// ==========================
+// Reducer combiné global (tests)
+// ==============================
 
 import { subDays } from 'date-fns'
 
@@ -12,9 +12,9 @@ describe('Store-level reducer', () => {
   // …correctement déléguer l’état par défaut
   // ----------------------------------------
   //
-  // On vérifie qu’îl délègue bien à ses *slice reducers* combinés
-  // leurs définitions d’état par défaut (on suppose, en tout cas,
-  // qu’il procède ainsi pour pondre un état par défaut complet).
+  // On vérifie qu’îl délègue bien à ses *slice reducers* combinés leurs
+  // définitions d’état par défaut (on suppose, en tout cas, qu’il procède ainsi
+  // pour pondre un état par défaut complet).
   it('should properly accrue its initial state', () => {
     const initialState = undefined
     const expectedState = {

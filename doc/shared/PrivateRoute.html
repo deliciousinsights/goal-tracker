@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head><title>shared/PrivateRoute</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="shared/PrivateRoute"><meta name="groc-project-path" content="src/shared/PrivateRoute.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/shared/PrivateRoute.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="enrobeur-de-route-authentifie">Enrobeur de route authentifiée</h1>
+<p>Permet de définir des routes exigeant que l’utilisateur soit logué.  En
+pratique, définit une route classique amenant sur un HOC connecté au <em>store</em>
+Redux et vérifiant l’état de l’authentification.  Si l’utilisateur est
+connecté, on <em>render</em> le composant normalement, sinon on utilise un
+<code>&lt;Redirect /&gt;</code> pour ramener à l’écran de connexion.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> { Redirect, Route, useHistory } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-router-dom'</span>
+<span class="hljs-keyword">import</span> { useSelector } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-redux'</span>
+
+<span class="hljs-keyword">import</span> { elementType } <span class="hljs-keyword">from</span> <span class="hljs-string">'./prop-types'</span>
+
+export default function PrivateRoute({ component, ...delegated }) {
+  return (
+    &lt;Route
+      {...delegated}
+      render={(props) =&gt; &lt;PrivateComponent component={component} {...props} /&gt;}
+    /&gt;
+  )
+}
+
+PrivateRoute.propTypes = {
+  component: elementType.isRequired,
+}
+
+function PrivateComponent({ component: Component, ...props }) {
+  const loggedIn = useSelector(selectLoggedIn)
+  const history = useHistory()
+
+  if (loggedIn) {
+    return &lt;Component {...props} /&gt;
+  }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Si on résulte d’une nav interactive une fois l’appli rendue côté client,
+<code>history.action</code> vaut <code>PUSH</code> : une interdiction devrait donc faire l’objet
+d’un ajout d’URL dans l’historique (vers le login), et non un remplacement
+de l’URL précédente.  En revanche, lors d’un rendu initial sur navigation
+classique du browser, <code>history.action</code> sera autre (normalement <code>POP</code>), et
+de fait, on devrait éviter une étape d’historique intermédiaire.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">const</span> shouldPush = history.action === <span class="hljs-string">'PUSH'</span>
+
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Redirect</span> <span class="hljs-attribute">push</span>=<span class="hljs-value">{shouldPush}</span> <span class="hljs-attribute">to</span>=<span class="hljs-value">'/'</span> /&gt;</span>
+}
+PrivateComponent.propTypes = {
+  component: elementType.isRequired,
+}
+
+const selectLoggedIn = (state) =&gt; state.currentUser.loginState === 'logged-in'
+</span></div></div></div></div></body></html>

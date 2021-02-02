@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="en"><head><title>lib/helpers.spec</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="lib/helpers.spec"><meta name="groc-project-path" content="src/lib/helpers.spec.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/lib/helpers.spec.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="utilitaires-tests">Utilitaires (tests)</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { subDays } <span class="hljs-keyword">from</span> <span class="hljs-string">'date-fns'</span>
+
+<span class="hljs-keyword">import</span> { formatDate, getDayCounts, isoDate } <span class="hljs-keyword">from</span> <span class="hljs-string">'./helpers'</span>
+
+describe(<span class="hljs-string">'formatDate'</span>, () =&gt; {
+  it(<span class="hljs-string">'should render today properly'</span>, () =&gt; {
+    const today = new Date()
+    expect(formatDate(today)).toBe(<span class="hljs-string">'Aujourd’hui'</span>)
+  })
+
+  it(<span class="hljs-string">'should render yesterday properly'</span>, () =&gt; {
+    const yesterday = subDays(new Date(), 1)
+    expect(formatDate(yesterday)).toBe(<span class="hljs-string">'Hier'</span>)
+  })
+
+  it(<span class="hljs-string">'should render the day before yesterday properly'</span>, () =&gt; {
+    const twoDaysAgo = subDays(new Date(), 2)
+    expect(formatDate(twoDaysAgo)).toBe(<span class="hljs-string">'Avant-hier'</span>)
+  })
+
+  it(<span class="hljs-string">'should render any other date with a long date form'</span>, () =&gt; {
+    expect(formatDate(<span class="hljs-string">'2016-03-03'</span>, null, { refDate: <span class="hljs-string">'2016-03-06'</span> })).toBe(
+      <span class="hljs-string">'jeudi 3 mars 2016'</span>
+    )
+  })
+
+  it(<span class="hljs-string">'should honor a custom format in French, if provided'</span>, () =&gt; {
+    expect(formatDate(<span class="hljs-string">'2016-03-06'</span>, <span class="hljs-string">'medium'</span>)).toBe(<span class="hljs-string">'6 mars 2016'</span>)
+  })
+})
+
+describe(<span class="hljs-string">'getDayCounts'</span>, () =&gt; {
+  const goals = [
+    { id: 0, target: 10 },
+    { id: 1, target: 5 },
+    { id: 2, target: 27 },
+  ]
+
+  it(<span class="hljs-string">'should properly compute totals on full progress info'</span>, () =&gt; {
+    expect(getDayCounts({ 0: 1, 1: 2, 2: 3 }, goals)).toEqual({
+      totalProgress: 6,
+      totalTarget: 42,
+    })
+  })
+
+  it(<span class="hljs-string">'should properly compute totals on partial progress info'</span>, () =&gt; {
+    expect(getDayCounts({ 0: 1, 2: 3 }, goals)).toEqual({
+      totalProgress: 4,
+      totalTarget: 42,
+    })
+  })
+
+  it(<span class="hljs-string">'should properly compute zero totals on empty progress info'</span>, () =&gt; {
+    expect(getDayCounts({}, goals)).toEqual({
+      totalProgress: 0,
+      totalTarget: 42,
+    })
+  })
+
+  it(<span class="hljs-string">'should properly compute zero totals on empty goals'</span>, () =&gt; {
+    expect(getDayCounts({}, [])).toEqual({ totalProgress: 0, totalTarget: 0 })
+    expect(getDayCounts({ 0: 1, 1: 2, 2: 3 }, [])).toEqual({
+      totalProgress: 0,
+      totalTarget: 0,
+    })
+  })
+})
+
+describe(<span class="hljs-string">'isoDate'</span>, () =&gt; {
+  it(<span class="hljs-string">'should properly format its argument'</span>, () =&gt; {
+    expect(isoDate(new Date(0))).toEqual(<span class="hljs-string">'1970-01-01'</span>)
+  })
+})</div></div></div></div></body></html>

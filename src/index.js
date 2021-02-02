@@ -1,3 +1,6 @@
+// Point d’entrée de l’application
+// ===============================
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 
@@ -7,6 +10,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 import './lib/clock'
 
+// Rendu initial au chargement
 ReactDOM.render(
   <React.StrictMode>
     <App />

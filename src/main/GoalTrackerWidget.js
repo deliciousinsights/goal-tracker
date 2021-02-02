@@ -1,3 +1,6 @@
+// Suivi du jour pour un objectif
+// ==============================
+
 import Add from '@material-ui/icons/Add'
 import Fab from '@material-ui/core/Fab'
 import ThumbUp from '@material-ui/icons/ThumbUp'
@@ -7,12 +10,17 @@ import classes from './TrackerScreen.module.css'
 import { func, GoalPropType, nonNegativeInteger } from '../shared/prop-types'
 import Gauge from '../shared/Gauge'
 
+// Section de l'écran principal, dédiée à un objectif.  Fournit notamment le
+// descriptif de l'objectif et l’éventuel bouton de progression.
+
 export default function GoalTrackerWidget({
+  // La déstructuration en force !
   goal,
   goal: { name, units, target },
   onProgress,
   progress,
 }) {
+  // La beauté d'un ternaire multi-lignes…
   const adderComponent =
     target > progress ? (
       <Fab color='secondary' onClick={() => onProgress?.(goal)} size='small'>
