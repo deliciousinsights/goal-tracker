@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="en"><head><title>auth/LoginScreen.spec</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="auth/LoginScreen.spec"><meta name="groc-project-path" content="src/auth/LoginScreen.spec.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/auth/LoginScreen.spec.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="cran-de-connexion-tests">Écran de connexion (tests)</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { Provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-redux'</span>
+<span class="hljs-keyword">import</span> { render, screen } <span class="hljs-keyword">from</span> <span class="hljs-string">'@testing-library/react'</span>
+<span class="hljs-keyword">import</span> userEvent <span class="hljs-keyword">from</span> <span class="hljs-string">'@testing-library/user-event'</span>
+
+<span class="hljs-keyword">import</span> LoginScreen <span class="hljs-keyword">from</span> <span class="hljs-string">'./LoginScreen'</span>
+<span class="hljs-keyword">import</span> { makeStore } <span class="hljs-keyword">from</span> <span class="hljs-string">'../store'</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">'@testing-library/jest-dom/extend-expect'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Cet import enregistre des assertions supplémentaires liées à jest-dom dans le
+<code>expect()</code> de Jest, telles que <code>toBeDisabled()</code>, <code>toHaveClass()</code> ou encore
+<code>toHaveAttribute()</code>.</p></div></div><div class="code"><div class="wrapper">describe(<span class="hljs-string">'&lt;LoginScreen /&gt;'</span>, () =&gt; {
+  it(<span class="hljs-string">'should adjust button when logged-out based on values'</span>, <span class="hljs-keyword">async</span> () =&gt; {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Si la mise en place va au-delà d’un simple <code>render()</code> de RTL, on
+centralise celle-ci dans une fonction locale <code>setup()</code>, par convention.
+La fonction est déclarée plus bas.  Les arguments varient d’une suite de
+tests à l’autre, selon ce qu’on veut faire varier.  Ici, c’est le
+<code>currentUser.loginState</code> initial.</p></div></div><div class="code"><div class="wrapper">    setup(<span class="hljs-string">'logged-out'</span>)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On récupère le bouton d’envoi du formulaire par son texte…</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">const</span> button = screen.getByRole(<span class="hljs-string">'button'</span>, { name: <span class="hljs-string">'Connecte-toi'</span> })</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>…et on vérifie qu’à ce stade (champs vides) il est désactivé.</p></div></div><div class="code"><div class="wrapper">    expect(button).toBeDisabled()</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On récupère le champ e-mail par son libellé…</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">const</span> emailField = screen.getByLabelText(<span class="hljs-regexp">/E-mail/</span>)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>…et on simule une saisie.  En pratique, le <code>onChange</code> de React réagit à
+une pléthore d’événements DOM (ex. <code>change</code>, <code>input</code>, <code>keypress</code>,
+<code>paste</code>), mais ici on va opter pour un bon vieux <code>change</code> à l’ancienne.
+Le second argument fournit les propriétés qu’on souhaite personnaliser
+pour l’objet événement qui sera généré.</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">await</span> userEvent.type(emailField, <span class="hljs-string">'foo@bar.com'</span>)
+    expect(button).toBeDisabled()
+
+    <span class="hljs-keyword">const</span> passwordField = screen.getByLabelText(<span class="hljs-regexp">/Mot de passe/</span>)
+    <span class="hljs-keyword">await</span> userEvent.type(passwordField, <span class="hljs-string">'foobar'</span>)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Une fois les deux champs remplis, le bouton de connexion devrait être
+disponible.</p></div></div><div class="code"><div class="wrapper">    expect(button).toBeEnabled()
+  })
+
+  it(<span class="hljs-string">'should disable the button when pending'</span>, () =&gt; {
+    setup(<span class="hljs-string">'pending'</span>)
+    expect(screen.getByRole(<span class="hljs-string">'button'</span>, { name: <span class="hljs-string">'Connecte-toi'</span> })).toBeDisabled()
+  })
+
+  it(<span class="hljs-string">'should restore the button and display a snackbar on failure'</span>, () =&gt; {
+    setup(<span class="hljs-string">'failure'</span>)
+    expect(screen.getByRole(<span class="hljs-string">'button'</span>, { name: <span class="hljs-string">'Connecte-toi'</span> })).toBeDisabled()
+    expect(
+      screen.getByText(<span class="hljs-string">'Identifiant ou mot de passe invalide'</span>)
+    ).toBeInTheDocument()
+  })</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Fonction centralisée de mise en place du test.  Comme le composant utilise
+un store Redux en vigueur (en raison de ses hooks React-Redux), il nous
+faut l’enrober dans un <code>&lt;Provider&gt;</code> avec un <em>store</em> adéquat.  C’est tout
+l’intérêt d’avoir exporté notre <code>configureStore)</code> en plus du <em>store</em> applicatif
+par défaut.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setup</span>(<span class="hljs-params">loginState</span>) </span>{
+    <span class="hljs-keyword">const</span> store = makeStore({ currentUser: { loginState } })
+    render(
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Provider</span> <span class="hljs-attribute">store</span>=<span class="hljs-value">{store}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">LoginScreen</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">Provider</span>&gt;</span>
+    )</span>
+  }
+})</div></div></div></div></body></html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="en"><head><title>main/TrackerScreen</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="main/TrackerScreen"><meta name="groc-project-path" content="src/main/TrackerScreen.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/main/TrackerScreen.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="cran-de-suivi-des-objectifs">Écran de suivi des objectifs</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { Link } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-router-dom'</span>
+<span class="hljs-keyword">import</span> { useDispatch, useSelector } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-redux'</span>
+<span class="hljs-keyword">import</span> { useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+
+<span class="hljs-keyword">import</span> Button <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Button'</span>
+<span class="hljs-keyword">import</span> Card <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Card'</span>
+<span class="hljs-keyword">import</span> CardActions <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/CardActions'</span>
+<span class="hljs-keyword">import</span> CardContent <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/CardContent'</span>
+<span class="hljs-keyword">import</span> CardHeader <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/CardHeader'</span>
+<span class="hljs-keyword">import</span> HistoryIcon <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/icons-material/History'</span>
+<span class="hljs-keyword">import</span> SettingsIcon <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/icons-material/Settings'</span>
+<span class="hljs-keyword">import</span> Slide <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Slide'</span>
+<span class="hljs-keyword">import</span> Snackbar <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Snackbar'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Remarquez l’injection CSS à la volée, depuis une feuille de style CSS, via un
+simple import.  C’est grâce à la combinaison de plusieurs loaders Webpack :
+<code>css-loader</code>, qui transforme la CSS en module JS avec exports des règles, et
+<code>style-loader</code>, qui va injecter ces règles à la volée dans le DOM, sur les
+éléments concernés, garantissant leur application quel que soit le contexte.</p>
+<p>En mode production, on configure le <code>MiniCssExtractPlugin</code> pour sortir toutes
+les CSS issues de feuilles autonomes en un seul fichier CSS optimisé, pour
+permettre l’application de styles dès le chargement, sans attendre que JS
+s’exécute.</p>
+<p>On utilise ici des <a href="https://github.com/css-modules/css-modules#readme">CSS
+Modules</a> pour obtenir des
+classes uniques en production afin de réduire les conflits de portée CSS.</p>
+<p>Create React App <a href="https://create-react-app.dev/docs/adding-a-css-modules-stylesheet">préconfigure tout
+ça</a> pour
+vous aux petits oignons.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> classes <span class="hljs-keyword">from</span> <span class="hljs-string">'./TrackerScreen.module.css'</span>
+<span class="hljs-keyword">import</span> { formatDate, getDayCounts } <span class="hljs-keyword">from</span> <span class="hljs-string">'../lib/helpers'</span>
+<span class="hljs-keyword">import</span> Gauge <span class="hljs-keyword">from</span> <span class="hljs-string">'../shared/Gauge'</span>
+<span class="hljs-keyword">import</span> GoalTrackerWidget <span class="hljs-keyword">from</span> <span class="hljs-string">'./GoalTrackerWidget'</span>
+<span class="hljs-keyword">import</span> { progressOnGoal } <span class="hljs-keyword">from</span> <span class="hljs-string">'../reducers/todaysProgress'</span>
+<span class="hljs-keyword">import</span> { requestNotificationPermission } <span class="hljs-keyword">from</span> <span class="hljs-string">'../reducers/config'</span>
+
+export default function TrackerScreen() {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Au premier rendu, on ajuste le titre du document pour permettre un
+historique de navigation utilisable (et pas une tonne de titres
+identiques).  Le <a href="https://fr.reactjs.org/docs/hooks-reference.html#conditionally-firing-an-effect">deuxième
+argument</a>
+est le tableau de dépendances qui indique quand relancer l’effet : comme il
+est vide, seul le premier rendu du composant est concerné.</p></div></div><div class="code"><div class="wrapper">  useEffect(() =&gt; {
+    <span class="hljs-built_in">document</span>.title = <span class="hljs-string">'Mes objectifs du jour'</span>
+  }, [])</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On s’intéresse uniquement aux champs <code>canPromptForNotify</code>, <code>goals</code>, <code>today</code>
+et <code>todaysProgress</code> de l’état global, qu’on veut retrouver dans nos
+propriétés sous les mêmes noms.  Par ricochet, seuls les changements
+apportés à ces champs entraîneront un éventuel <em>re-render</em> de notre
+conteneur.  La fonction <code>selectState</code>, qui va chercher ces infos, est plus
+bas dans le fichier.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">const</span> { canPromptForNotify, goals, today, todaysProgress } =
+    useSelector(selectState)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Vu qu’on va solliciter le <em>store</em> pour faire progresser les objectifs, on a
+besoin de <code>dispatch</code> afin de lui envoyer une action.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">const</span> dispatch = useDispatch()
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Card</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{classes.goalTracker}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">CardHeader</span>
+          <span class="hljs-attribute">subheader</span>=<span class="hljs-value">{&lt;Gauge</span> {<span class="hljs-attribute">...overallProgress</span>()} /&gt;</span>}
+          title={formatDate(today, 'medium')}
+        /&gt;
+        <span class="hljs-tag">&lt;<span class="hljs-title">CardContent</span>&gt;</span>
+          {goals.map((goal) =&gt; (
+            <span class="hljs-tag">&lt;<span class="hljs-title">GoalTrackerWidget</span>
+              <span class="hljs-attribute">goal</span>=<span class="hljs-value">{goal}</span>
+              <span class="hljs-attribute">key</span>=<span class="hljs-value">{goal.id}</span>
+              <span class="hljs-attribute">onProgress</span>=<span class="hljs-value">{markGoalProgression}</span>
+              <span class="hljs-attribute">progress</span>=<span class="hljs-value">{todaysProgress[goal.id]</span> || <span class="hljs-attribute">0</span>}
+            /&gt;</span>
+          )</span>)}
+        &lt;<span class="hljs-regexp">/CardContent&gt;
+        &lt;CardActions&gt;
+          &lt;Button
+            color='secondary'
+            component={Link}
+            startIcon={&lt;HistoryIcon /</span>&gt;}
+            to=<span class="hljs-string">'/history'</span>
+            variant=<span class="hljs-string">'contained'</span>
+          &gt;
+            Historique
+          &lt;<span class="hljs-regexp">/Button&gt;
+          &lt;Button
+            component={Link}
+            startIcon={&lt;SettingsIcon /</span>&gt;}
+            to=<span class="hljs-string">'/settings'</span>
+            variant=<span class="hljs-string">'contained'</span>
+          &gt;
+            Paramètres
+          &lt;<span class="hljs-regexp">/Button&gt;
+        &lt;/</span>CardActions&gt;
+      <span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-title">Card</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Snackbar</span>
+        <span class="hljs-attribute">action</span>=<span class="hljs-value">{</span>
+          &lt;<span class="hljs-attribute">Button</span>
+            <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> dispatch(requestNotificationPermission())}
+            variant='contained'
+          &gt;
+            Oh oui !
+          <span class="hljs-tag">&lt;/<span class="hljs-title">Button</span>&gt;</span>
+        }
+        message='Cliquez ci-contre pour être notifié·e quand votre journée est historisée'
+        open={canPromptForNotify}
+        TransitionComponent={Slide}
+      /&gt;
+    <span class="hljs-tag">&lt;/&gt;</span>
+  )</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Callback pour le <code>onProgress</code> des <code>&lt;GoalTrackerWidget /&gt;</code> qui va déclencher
+la progression de l’objectif dans l’état global applicatif.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">markGoalProgression</span>(<span class="hljs-params">{ id }</span>) </span>{
+    dispatch(progressOnGoal({ goalId: id }))
+  }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Petite méthode métier calculant notre pourcentage global d’accomplissement
+des objectifs quotidiens.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">overallProgress</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">const</span> { totalProgress, totalTarget } = getDayCounts(todaysProgress, goals)
+
+    <span class="hljs-keyword">return</span> { value: totalProgress, max: totalTarget }
+  }
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Fonction de sélection des valeurs utiles au composant au sein de l’état
+global applicatif géré par Redux.  L’argument est l’état global applicatif
+dans son intégralité, la valeur de retour sera celle renvoyée par le
+<a href="https://react-redux.js.org/api/hooks#useselector"><code>useSelector()</code></a> auquel on
+aura passé cette fonction.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">selectState</span>(<span class="hljs-params">{
+  config: { canPromptForNotify },
+  goals,
+  today,
+  todaysProgress,
+}</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    canPromptForNotify,
+    goals,
+    today,
+    todaysProgress,
+  }
+}</div></div></div></div></body></html>

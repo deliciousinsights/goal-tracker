@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head><title>App</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="App"><meta name="groc-project-path" content="src/App.js"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/App.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="composant-principal-applicatif">Composant principal applicatif</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { Provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-redux'</span>
+<span class="hljs-keyword">import</span> { Route, BrowserRouter <span class="hljs-keyword">as</span> Router, Routes } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-router-dom'</span>
+
+<span class="hljs-keyword">import</span> HistoryScreen <span class="hljs-keyword">from</span> <span class="hljs-string">'./history/HistoryScreen'</span>
+<span class="hljs-keyword">import</span> HomeScreen <span class="hljs-keyword">from</span> <span class="hljs-string">'./main/HomeScreen'</span>
+<span class="hljs-keyword">import</span> RehydrationWaiter <span class="hljs-keyword">from</span> <span class="hljs-string">'./RehydrationWaiter'</span>
+<span class="hljs-keyword">import</span> RequireAuth <span class="hljs-keyword">from</span> <span class="hljs-string">'./shared/RequireAuth'</span>
+<span class="hljs-keyword">import</span> SettingsScreen <span class="hljs-keyword">from</span> <span class="hljs-string">'./settings/SettingsScreen'</span>
+<span class="hljs-keyword">import</span> store <span class="hljs-keyword">from</span> <span class="hljs-string">'./store'</span>
+
+export default function App() {
+  return (</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On enrobe le tout par le
+<a href="https://react-redux.js.org/api/provider"><code>Provider</code></a> de Redux, pour que
+l’état central et sa méthode <code>dispatch</code> puissent être accessibles à travers
+toute l’arborescence de rendu.</p>
+<p>Ensuite on décrit les routes (imbriquées) de l’application, avec leurs
+composants associés.  L’implémentation d’historique fournie explicitement
+permet d’utiliser un historique basé <code>pushState</code> plutôt que celui, par
+défaut, basé hash (parties <code>#…</code> des URLs).  Cela suppose toutefois une
+capacité du serveur à retourner notre appli client correctement configurée
+pour toutes ces “URLs profondes”.</p></div></div><div class="code"><div class="wrapper">    &lt;Provider store={store}&gt;
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Router</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">RehydrationWaiter</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">Routes</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">Route</span> <span class="hljs-attribute">index</span> <span class="hljs-attribute">element</span>=<span class="hljs-value">{&lt;HomeScreen</span> /&gt;</span>} /&gt;
+            <span class="hljs-tag">&lt;<span class="hljs-title">Route</span> <span class="hljs-attribute">element</span>=<span class="hljs-value">{&lt;RequireAuth</span> /&gt;</span>}&gt;
+              <span class="hljs-tag">&lt;<span class="hljs-title">Route</span> <span class="hljs-attribute">path</span>=<span class="hljs-value">'/settings'</span> <span class="hljs-attribute">element</span>=<span class="hljs-value">{&lt;SettingsScreen</span> /&gt;</span>} /&gt;
+              <span class="hljs-tag">&lt;<span class="hljs-title">Route</span> <span class="hljs-attribute">path</span>=<span class="hljs-value">'/history'</span> <span class="hljs-attribute">element</span>=<span class="hljs-value">{&lt;HistoryScreen</span> /&gt;</span>} /&gt;
+            <span class="hljs-tag">&lt;/<span class="hljs-title">Route</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-title">Routes</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-title">RehydrationWaiter</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">Router</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">Provider</span>&gt;</span>
+  )</span>
+}</div></div></div></div></body></html>

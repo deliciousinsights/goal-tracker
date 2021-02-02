@@ -2,7 +2,7 @@
 // ================================
 
 // Sous-section de l'écran d’historique, dédiée à un objectif sur un jour
-// précis.  Rendu en fait à l'intérieur d'un autre composant bête: `HistoryDay`.
+// précis.  Affiché à l'intérieur d'un autre composant : `HistoryDay`.
 
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
@@ -13,8 +13,8 @@ import {
   HistoryDayProgressesPropType,
 } from '../shared/prop-types'
 
-// La déstructuration et les valeurs par défaut en force !
 export default function HistoryDayGoal({
+  // La déstructuration et les valeurs par défaut en force !
   goal: { name, units },
   stats: [progress = 0, target] = [],
 }) {

@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="en"><head><title>shared/prop-types</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="shared/prop-types"><meta name="groc-project-path" content="src/shared/prop-types.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/shared/prop-types.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="types-complexes-de-props-react">Types complexes de props React</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> {
+  and,
+  between,
+  integer,
+  keysOf,
+  nonNegativeInteger,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'airbnb-prop-types'</span>
+<span class="hljs-keyword">import</span> {
+  arrayOf,
+  bool,
+  exact,
+  func,
+  node,
+  objectOf,
+  oneOfType,
+  string,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'prop-types'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Les composants React peuvent déclarer <a href="https://fr.reactjs.org/docs/typechecking-with-proptypes.html">le type et la structure des
+props</a> qui leur
+sont passées, pour bénéficier d’une aide à la validation affichée
+généralement sous forme d’erreurs dans la console du navigateur.</p>
+<p>Outre les types prédéfinis, il est possible de déclarer des types complexes,
+avec des objets, des tableaux, etc.  Lorsqu&#39;ils sont répétés à travers le
+code, autant les centraliser, comme ici.</p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On ré-exporte ici tous les types externes exploités par l’application, comme
+ça le reste du code de l’appli n’a pas à se soucier de l’origine des
+validateurs (classiques, Airbnb, ou nous) : il importe depuis ce module à
+tous les coups.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> {
+  arrayOf,
+  bool,
+  exact,
+  func,
+  node,
+  nonNegativeInteger,
+  oneOfType,
+  string,
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Validateur d’entier positif non nul (ex. valeurs d’objectifs).  Airbnb
+fournit <code>nonNegativeInteger</code>, mais pas la version sans le zéro…</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> positiveInteger = and([integer(), between({ gt: <span class="hljs-number">0</span> })])</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Description d’un objectif, utilisé dans de nombreux composants.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> GoalPropType = exact({
+  id: string.isRequired,
+  name: string.isRequired,
+  target: positiveInteger.isRequired,
+  units: string.isRequired,
+})</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Base &quot;champ requis&quot; du validateur pour les champs <code>progresses</code> des journées
+d’historique.  Sera exposé sous la version <code>isRequired</code> d’un enrobage qui
+lève cette exigence en vérifiant <code>null</code> et <code>undefined</code> (voir ci-après).</p></div></div><div class="code"><div class="wrapper"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">requiredHistoryDayProgressesPropType</span>(<span class="hljs-params">props, propName, componentName</span>) </span>{
+  <span class="hljs-keyword">const</span> prefix = <span class="hljs-string">`<span class="hljs-subst">${propName}</span> in <span class="hljs-subst">${componentName}</span> must`</span>
+  <span class="hljs-keyword">const</span> value = props[propName]</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ol>
+<li>Le champ doit être un tableau</li>
+</ol></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">Array</span>.isArray(value)) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`<span class="hljs-subst">${prefix}</span> be an array.`</span>)
+  }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ol>
+<li>Il doit contenir une paire de véritables nombres entiers</li>
+</ol></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">if</span> (value.length !== <span class="hljs-number">2</span> || !value.every(<span class="hljs-built_in">Number</span>.isInteger)) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`<span class="hljs-subst">${prefix}</span> be a pair of integers.`</span>)
+  }
+
+  <span class="hljs-keyword">const</span> [progress, target] = value</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ol>
+<li>La valeur de progression ne peut être négative</li>
+</ol></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">if</span> (progress &lt; <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`<span class="hljs-subst">${prefix}</span> start with a non-negative progress value.`</span>)
+  }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ol>
+<li>La valeur cible dénormalisée de l&#39;objectif ne peut être
+négative ou nulle.</li>
+</ol></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">if</span> (target &lt;= <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`<span class="hljs-subst">${prefix}</span> end with a positive target value.`</span>)
+  }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Bon, bah tout va bien alors…</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Validateur exporté, en mode &quot;non requis&quot; pour coller aux conventions des
+<code>React.PropTypes</code>.  Lève en fait l’exigence de présence du code noyau en
+court-circuitant les cas <code>null</code> et <code>undefined</code> (d’où le <code>==</code> laxiste).</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">HistoryDayProgressesPropType</span>(<span class="hljs-params">props, propName, componentName</span>) </span>{
+  <span class="hljs-keyword">const</span> value = props[propName]
+
+  <span class="hljs-keyword">if</span> (value == <span class="hljs-literal">null</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>
+  }
+
+  <span class="hljs-keyword">return</span> requiredHistoryDayProgressesPropType(props, propName, componentName)
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Exposition du validateur noyau, qui exige le champ, sous la propriété chaînée
+<code>isRequired</code> habituelle.</p></div></div><div class="code"><div class="wrapper">HistoryDayProgressesPropType.isRequired = requiredHistoryDayProgressesPropType</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Description d’un jour de stats dans l’historique.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> HistoryDayStatsPropType = exact({
+  date: string.isRequired,
+  progresses: and([</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Exigence sur les clés : IDs d’objectifs, donc chaînes représentant des
+BSON IDs.</p></div></div><div class="code"><div class="wrapper">    keysOf(string),</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Exigence sur les valeurs : paires d’entiers avec contraintes
+supplémentaires</p></div></div><div class="code"><div class="wrapper">    objectOf(HistoryDayProgressesPropType),
+  ]).isRequired,
+})</div></div></div></div></body></html>

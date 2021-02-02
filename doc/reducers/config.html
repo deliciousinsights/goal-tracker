@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head><title>reducers/config</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="reducers/config"><meta name="groc-project-path" content="src/reducers/config.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/reducers/config.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="configuration-quotsystmequot-de-l39appli">Configuration &quot;système&quot; de l&#39;appli</h1>
+<p>En écoutant l&#39;action de réhydratation de redux-persist, nous pouvons
+maintenir un drapeau la signifiant, ce qui permettra à notre petit composant
+<code>RehydrationWaiter</code> de retenir le rendu initial jusqu&#39;à ce moment-là.</p>
+<p>On traite également ici les permissions de notification, tant leur état
+initial (et la dispo de l&#39;API) que la demande ultérieure de la permission,
+dans une <a href="https://redux-toolkit.js.org/usage/usage-guide#async-requests-with-createasyncthunk">action asynchrone
+générique</a>,
+traitée grâce au middleware Redux approprié préconfiguré par Redux Toolkit.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { createAsyncThunk, createReducer } <span class="hljs-keyword">from</span> <span class="hljs-string">'@reduxjs/toolkit'</span>
+<span class="hljs-keyword">import</span> { REHYDRATE } <span class="hljs-keyword">from</span> <span class="hljs-string">'redux-persist/constants'</span>
+
+const bootNotificationPermission =
+  (typeof window !== <span class="hljs-string">'undefined'</span> &amp;&amp; window.Notification?.permission) || <span class="hljs-string">'denied'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="action-creators">Action Creators</h2></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Dispatché par l&#39;UI, déclenche la demande de permission.  Chromium n&#39;exige pas
+pour le moment que ces demandes soient faites au sein d&#39;une interaction
+utilisateur, mais Firefox si.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> requestNotificationPermission = createAsyncThunk(
+  <span class="hljs-string">'goal-tracker/config/requestNotificationPermission'</span>,</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Notre fonction étant <code>async</code>, tout renvoi interne, s&#39;il n&#39;est pas déjà une
+promesse, sera automatiqement enrobé comme une promesse accomplie.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-keyword">if</span> (bootNotificationPermission === <span class="hljs-string">'denied'</span>) {
+      <span class="hljs-keyword">return</span> <span class="hljs-string">'denied'</span>
+    }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Le recours aux
+<a href="https://developer.mozilla.org/fr/docs/Web/API/notification/Using_Web_Notifications">notifications</a>
+“système” n’est pas automatiquement possible : l’utilisateur doit nous
+l’avoir accordé.  Cette fonction renvoie une promesse vers le statut
+résultant, utilisée suite à l&#39;action de demande de permission.</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">return</span> <span class="hljs-built_in">window</span>.Notification.requestPermission()
+  }
+)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="rducteur">Réducteur</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> createReducer(
+  {
+    canPromptForNotify: bootNotificationPermission === <span class="hljs-string">'default'</span>,
+    canNotify: bootNotificationPermission === <span class="hljs-string">'granted'</span>,
+    rehydrated: <span class="hljs-literal">false</span>,
+  },
+  (builder) =&gt; {
+    builder
+      .addCase(REHYDRATE, (state) =&gt; {
+        state.rehydrated = <span class="hljs-literal">true</span>
+      })
+      .addCase(
+        requestNotificationPermission.fulfilled,
+        (state, { payload: status }) =&gt; {
+          state.canPromptForNotify = status === <span class="hljs-string">'default'</span>
+          state.canNotify = status === <span class="hljs-string">'granted'</span>
+        }
+      )
+  }
+)</div></div></div></div></body></html>

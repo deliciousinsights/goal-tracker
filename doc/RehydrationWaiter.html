@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang="en"><head><title>RehydrationWaiter</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="RehydrationWaiter"><meta name="groc-project-path" content="src/RehydrationWaiter.js"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/RehydrationWaiter.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="attente-de-rhydratation">Attente de réhydratation</h1>
+<p>Tout petit composant basé sur le drapeau <code>rehydrated</code> de l&#39;état applicatif,
+qui permet d&#39;éviter un rendu avant que ce dernier ne soit réhydraté par
+redux-persist.  On s&#39;épargne ainsi un rendu en deux temps (avec les
+transitions CSS sur les jauges) au lancement.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { node } <span class="hljs-keyword">from</span> <span class="hljs-string">'./shared/prop-types'</span>
+
+const { useSelector } = require(<span class="hljs-string">'react-redux'</span>)
+
+export default function RehydrationWaiter({ children }) {
+  const rehydrated = useSelector(selectRehydrated)
+  return rehydrated ? children : null
+}
+RehydrationWaiter.propTypes = {
+  children: node.isRequired,
+}
+
+function selectRehydrated({ config: { rehydrated } }) {
+  return rehydrated
+}</div></div></div></div></body></html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en"><head><title>reducers/todaysProgress.spec</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="reducers/todaysProgress.spec"><meta name="groc-project-path" content="src/reducers/todaysProgress.spec.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/reducers/todaysProgress.spec.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="progressions-du-jour-tests">Progressions du jour (tests)</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> reducer, { progressOnGoal } <span class="hljs-keyword">from</span> <span class="hljs-string">'./todaysProgress'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Le <em>reducer</em> est censé…</p></div></div><div class="code"><div class="wrapper">describe(<span class="hljs-string">'Today’s Progress reducer'</span>, () =&gt; {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="fournir-son-tat-par-dfaut">…fournir son état par défaut</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper">  it(<span class="hljs-string">'should return its initial state'</span>, () =&gt; {
+    <span class="hljs-keyword">const</span> initialState = <span class="hljs-literal">undefined</span>
+    <span class="hljs-keyword">const</span> expectedState = {}
+
+    expect(reducer(initialState, {})).toEqual(expectedState)
+  })</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="grer-les-demandes-de-progression">…gérer les demandes de progression</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper">  it(<span class="hljs-string">'should handle goal progression'</span>, () =&gt; {
+    <span class="hljs-keyword">let</span> initialState = {}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ol>
+<li>Progression à incrément explicite, sur départ vide</li>
+</ol></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">let</span> expectedState = { <span class="hljs-number">1</span>: <span class="hljs-number">2</span> }
+    expect(
+      reducer(initialState, progressOnGoal({ goalId: <span class="hljs-number">1</span>, increment: <span class="hljs-number">2</span> }))
+    ).toEqual(expectedState)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ol>
+<li>Progression à incrément implicite, sur départ vide</li>
+</ol></div></div><div class="code"><div class="wrapper">    expectedState = { <span class="hljs-number">1</span>: <span class="hljs-number">1</span> }
+    expect(reducer(initialState, progressOnGoal({ goalId: <span class="hljs-number">1</span> }))).toEqual(
+      expectedState
+    )</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ol>
+<li>Progression à incrément implicite, sur progression existante</li>
+</ol></div></div><div class="code"><div class="wrapper">    initialState = { <span class="hljs-number">1</span>: <span class="hljs-number">1</span> }
+    expectedState = { <span class="hljs-number">1</span>: <span class="hljs-number">2</span> }
+    expect(reducer(initialState, progressOnGoal({ goalId: <span class="hljs-number">1</span> }))).toEqual(
+      expectedState
+    )</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ol>
+<li>Progression à incrément implicite, sur progressions autres</li>
+</ol></div></div><div class="code"><div class="wrapper">    initialState = { <span class="hljs-number">1</span>: <span class="hljs-number">2</span> }
+    expectedState = { <span class="hljs-number">1</span>: <span class="hljs-number">2</span>, <span class="hljs-number">2</span>: <span class="hljs-number">1</span> }
+    expect(reducer(initialState, progressOnGoal({ goalId: <span class="hljs-number">2</span> }))).toEqual(
+      expectedState
+    )
+  })
+})</div></div></div></div></body></html>

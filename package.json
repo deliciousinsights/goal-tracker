@@ -8,12 +8,14 @@
   "scripts": {
     "build": "react-scripts build",
     "deploy": "netlify deploy --prod",
+    "doc": "rimraf doc && npx groc",
     "eject": "react-scripts eject",
     "start": "react-scripts start",
     "start:all": "npm-run-all --parallel --print-label start start:api",
     "start:api": "node tools/dev-server.mjs",
     "start:poll": "cross-env CHOKIDAR_USEPOLLING=true npm start",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "test:cov": "npm test -- --coverage --watchAll"
   },
   "engines": {
     "node": ">= 14",

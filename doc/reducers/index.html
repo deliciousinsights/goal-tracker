@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head><title>reducers/index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="reducers/index"><meta name="groc-project-path" content="src/reducers/index.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/reducers/index.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="reducer-combin-global">Reducer combiné global</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { combineReducers } <span class="hljs-keyword">from</span> <span class="hljs-string">'redux'</span>
+<span class="hljs-keyword">import</span> reduceReducers <span class="hljs-keyword">from</span> <span class="hljs-string">'reduce-reducers'</span>
+
+<span class="hljs-keyword">import</span> config <span class="hljs-keyword">from</span> <span class="hljs-string">'./config'</span>
+<span class="hljs-keyword">import</span> currentUser <span class="hljs-keyword">from</span> <span class="hljs-string">'./currentUser'</span>
+<span class="hljs-keyword">import</span> goals <span class="hljs-keyword">from</span> <span class="hljs-string">'./goals'</span>
+<span class="hljs-keyword">import</span> history <span class="hljs-keyword">from</span> <span class="hljs-string">'./history'</span>
+<span class="hljs-keyword">import</span> reduceCloseDay <span class="hljs-keyword">from</span> <span class="hljs-string">'./closeDay'</span>
+<span class="hljs-keyword">import</span> today <span class="hljs-keyword">from</span> <span class="hljs-string">'./today'</span>
+<span class="hljs-keyword">import</span> todaysProgress <span class="hljs-keyword">from</span> <span class="hljs-string">'./todaysProgress'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><em>(Structuration de type
+<a href="https://github.com/erikras/ducks-modular-redux">Ducks</a>)</em></p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Selon la <a href="https://redux.js.org/recipes/structuring-reducers/splitting-reducer-logic">meilleure pratique
+Redux</a>,
+nous avons réalisé indépendamment les <em>reducers</em> des diverses parties de
+l’état.  On va utiliser
+<a href="https://redux.js.org/api/combinereducers"><code>combineReducers</code></a> pour les
+recombiner en un seul, qui délèguera automatiquement aux nôtres, champ par
+champ.</p>
+<p>Toutefois, une action (<code>CLOSE_DAY</code>) impacte plusieurs champs (en
+l’occurrence, <code>todaysProgress</code> et <code>history</code>), de sorte que nous allons la
+traiter dans un reducer <em>top-level</em> dédié (<code>closeDay</code>).</p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On crée le reducer consolidé…</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">const</span> coreReducer = combineReducers({</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>… basé sur nos reducers individuels pour chaque partie…</p></div></div><div class="code"><div class="wrapper">  config,
+  currentUser,
+  goals,
+  history,
+  today,
+  todaysProgress,
+})</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Ensuite, on définit le reducer final exporté par ce module, qui sera donc
+celui exploité par le <em>store</em> Redux, afin de traiter les actions
+multi-champs.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">const</span> goalTrackerReducer = reduceReducers(coreReducer, reduceCloseDay)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Parmi les autres options d&#39;implémentation, on aurait pu avoir…</p>
+<h2 id="la-version-hard-code-nave">La version hard-codée naïve</h2>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">goalTrackerReducer</span>(<span class="hljs-params">state, action</span>) </span>{
+  state = coreReducer(state, action)
+  state = closeDay(state, action)
+  <span class="hljs-keyword">return</span> state
+}</code></pre>
+<h2 id="la-version-dj-plus-gnrique">La version déjà plus générique</h2>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">goalTrackerReducer</span>(<span class="hljs-params">state, action</span>) </span>{
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> reducer <span class="hljs-keyword">of</span> [coreReducer, closeDay]) {
+    state = reducer(state, action)
+  }
+  <span class="hljs-keyword">return</span> state
+}</code></pre>
+<h2 id="le-reduce-justifi-">Le <code>reduce</code> justifié</h2>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">goalTrackerReducer</span>(<span class="hljs-params">state, action</span>) </span>{
+  <span class="hljs-keyword">return</span> [coreReducer, closeDay].reduce(
+    (prev, reducer) =&gt; reducer(prev, action),
+    state
+  )
+}</code></pre></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> goalTrackerReducer</div></div></div></div></body></html>

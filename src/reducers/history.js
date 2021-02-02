@@ -1,3 +1,6 @@
+// Historique (reducer)
+// ====================
+
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
 // Action Creators

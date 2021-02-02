@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="en"><head><title>default-state</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="default-state"><meta name="groc-project-path" content="src/default-state.js"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/default-state.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="tat-par-dfaut-dev--test">État par défaut (dev / test)</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { subDays } <span class="hljs-keyword">from</span> <span class="hljs-string">'date-fns'</span>
+
+<span class="hljs-keyword">import</span> { isoDate } <span class="hljs-keyword">from</span> <span class="hljs-string">'./lib/helpers'</span>
+
+const DEFAULT_STATE = {
+  currentUser: {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>loginState: &#39;logged-in&#39;,
+email: &#39;christophe@delicious-insights.com&#39;,</p></div></div><div class="code"><div class="wrapper">  },
+  goals: [
+    {
+      id: <span class="hljs-string">'5bf57a79890a6e2c11ec9665'</span>,
+      name: <span class="hljs-string">'Apprendre React'</span>,
+      target: <span class="hljs-number">5</span>,
+      units: <span class="hljs-string">'aspects'</span>,
+    },
+    {
+      id: <span class="hljs-string">'5bf57a79890a6e2c11ec9666'</span>,
+      name: <span class="hljs-string">'Apprendre Redux'</span>,
+      target: <span class="hljs-number">2</span>,
+      units: <span class="hljs-string">'vidéos'</span>,
+    },
+    {
+      id: <span class="hljs-string">'5bf57a79890a6e2c11ec9667'</span>,
+      name: <span class="hljs-string">'Apprendre Webpack'</span>,
+      target: <span class="hljs-number">3</span>,
+      units: <span class="hljs-string">'pages de doc'</span>,
+    },
+  ],
+  today: isoDate(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()),
+  todaysProgress: {
+    <span class="hljs-string">'5bf57a79890a6e2c11ec9665'</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-string">'5bf57a79890a6e2c11ec9666'</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-string">'5bf57a79890a6e2c11ec9667'</span>: <span class="hljs-number">1</span>,
+  },
+  history: [
+    {
+      date: isoDate(subDays(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(), <span class="hljs-number">1</span>)),
+      progresses: {
+        <span class="hljs-string">'5bf57a79890a6e2c11ec9665'</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">5</span>],
+        <span class="hljs-string">'5bf57a79890a6e2c11ec9666'</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>],
+      },
+    },
+    {
+      date: isoDate(subDays(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(), <span class="hljs-number">2</span>)),
+      progresses: {
+        <span class="hljs-string">'5bf57a79890a6e2c11ec9665'</span>: [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>],
+        <span class="hljs-string">'5bf57a79890a6e2c11ec9666'</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>],
+        <span class="hljs-string">'5bf57a79890a6e2c11ec9667'</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>],
+      },
+    },
+    {
+      date: isoDate(subDays(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(), <span class="hljs-number">3</span>)),
+      progresses: {
+        <span class="hljs-string">'5bf57a79890a6e2c11ec9665'</span>: [<span class="hljs-number">3</span>, <span class="hljs-number">5</span>],
+        <span class="hljs-string">'5bf57a79890a6e2c11ec9666'</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>],
+        <span class="hljs-string">'5bf57a79890a6e2c11ec9667'</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>],
+      },
+    },
+  ],
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> DEFAULT_STATE</div></div></div></div></body></html>

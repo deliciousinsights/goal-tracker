@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head><title>history/HistoryDayGoal</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="history/HistoryDayGoal"><meta name="groc-project-path" content="src/history/HistoryDayGoal.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/history/HistoryDayGoal.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="journe-historique-dun-objectif">Journée historique d’un objectif</h1></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Sous-section de l&#39;écran d’historique, dédiée à un objectif sur un jour
+précis.  Affiché à l&#39;intérieur d&#39;un autre composant : <code>HistoryDay</code>.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> ListItem <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/ListItem'</span>
+<span class="hljs-keyword">import</span> ListItemText <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/ListItemText'</span>
+
+<span class="hljs-keyword">import</span> Gauge <span class="hljs-keyword">from</span> <span class="hljs-string">'../shared/Gauge'</span>
+<span class="hljs-keyword">import</span> {
+  GoalPropType,
+  HistoryDayProgressesPropType,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'../shared/prop-types'</span>
+
+export default function HistoryDayGoal({</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>La déstructuration et les valeurs par défaut en force !</p></div></div><div class="code"><div class="wrapper">  goal: { name, units },
+  stats: [progress = <span class="hljs-number">0</span>, target] = [],
+}) {
+  <span class="hljs-keyword">const</span> details = (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Gauge</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{progress}</span> <span class="hljs-attribute">max</span>=<span class="hljs-value">{target}</span> /&gt;</span>
+      {progress} {units} sur {target}
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+  )</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ListItem</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">ListItemText</span>
+        <span class="hljs-attribute">component</span>=<span class="hljs-value">'div'</span>
+        <span class="hljs-attribute">primary</span>=<span class="hljs-value">{name}</span>
+        <span class="hljs-attribute">secondary</span>=<span class="hljs-value">{details}</span>
+        <span class="hljs-attribute">secondaryTypographyProps</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">component:</span> '<span class="hljs-attribute">div</span>' }}
+      /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">ListItem</span>&gt;</span>
+  )</span>
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Comme toujours, on définit les propriétés attendues/autorisées pour
+validation.</p></div></div><div class="code"><div class="wrapper">HistoryDayGoal.propTypes = {
+  goal: GoalPropType.isRequired,
+  stats: HistoryDayProgressesPropType.isRequired,
+}</div></div></div></div></body></html>

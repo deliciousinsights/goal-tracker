@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head><title>main/GoalTrackerWidget</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="main/GoalTrackerWidget"><meta name="groc-project-path" content="src/main/GoalTrackerWidget.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/main/GoalTrackerWidget.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="suivi-du-jour-pour-un-objectif">Suivi du jour pour un objectif</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> Add <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/icons-material/Add'</span>
+<span class="hljs-keyword">import</span> Fab <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Fab'</span>
+<span class="hljs-keyword">import</span> ThumbUp <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/icons-material/ThumbUp'</span>
+<span class="hljs-keyword">import</span> Typography <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Typography'</span>
+
+<span class="hljs-keyword">import</span> classes <span class="hljs-keyword">from</span> <span class="hljs-string">'./TrackerScreen.module.css'</span>
+<span class="hljs-keyword">import</span> { func, GoalPropType, nonNegativeInteger } <span class="hljs-keyword">from</span> <span class="hljs-string">'../shared/prop-types'</span>
+<span class="hljs-keyword">import</span> Gauge <span class="hljs-keyword">from</span> <span class="hljs-string">'../shared/Gauge'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Section de l&#39;écran principal, dédiée à un objectif.  Fournit notamment le
+descriptif de l&#39;objectif et l’éventuel bouton de progression.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">GoalTrackerWidget</span>(<span class="hljs-params">{</span></span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>La déstructuration en force !</p></div></div><div class="code"><div class="wrapper">  goal,
+  goal: { name, units, target },
+  onProgress,
+  progress,
+}) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>La beauté d&#39;un ternaire multi-lignes…</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">const</span> adderComponent =
+    target &gt; progress ? (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Fab</span>
+        <span class="hljs-attribute">color</span>=<span class="hljs-value">'secondary'</span>
+        <span class="hljs-attribute">size</span>=<span class="hljs-value">'small'</span>
+        <span class="hljs-attribute">aria-label</span>=<span class="hljs-value">{`Progresser</span> <span class="hljs-attribute">sur</span> ${<span class="hljs-attribute">name</span>}`}
+        <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> onProgress?.(goal)}
+      &gt;
+        <span class="hljs-tag">&lt;<span class="hljs-title">Add</span> <span class="hljs-attribute">data-testid</span>=<span class="hljs-value">'in-progress'</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">Fab</span>&gt;</span>
+    )</span> : (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Fab</span> <span class="hljs-attribute">disabled</span> <span class="hljs-attribute">size</span>=<span class="hljs-value">'small'</span> <span class="hljs-attribute">aria-label</span>=<span class="hljs-value">'Objectif atteint, bravo !'</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">ThumbUp</span> <span class="hljs-attribute">data-testid</span>=<span class="hljs-value">'completed'</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">Fab</span>&gt;</span>
+    )</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{classes.goal}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{classes.summary}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Typography</span> <span class="hljs-attribute">variant</span>=<span class="hljs-value">'h6'</span> <span class="hljs-attribute">component</span>=<span class="hljs-value">'h2'</span>&gt;</span>
+          {name}
+        <span class="hljs-tag">&lt;/<span class="hljs-title">Typography</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Gauge</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{progress}</span> <span class="hljs-attribute">max</span>=<span class="hljs-value">{target}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Typography</span> <span class="hljs-attribute">component</span>=<span class="hljs-value">'small'</span>&gt;</span>
+          {`${progress} ${units} sur ${target}`}
+        <span class="hljs-tag">&lt;/<span class="hljs-title">Typography</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{classes.cta}</span>&gt;</span>{adderComponent}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+  )</span>
+}
+
+GoalTrackerWidget.propTypes = {
+  goal: GoalPropType.isRequired,
+  progress: nonNegativeInteger.isRequired,
+  onProgress: func,
+}</div></div></div></div></body></html>

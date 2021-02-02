@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="en"><head><title>shared/RequireAuth</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="shared/RequireAuth"><meta name="groc-project-path" content="src/shared/RequireAuth.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/shared/RequireAuth.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="enrobeur-de-grappe-authentifie">Enrobeur de grappe authentifiée</h1>
+<p>Nous permet de définir des parties de l&#39;UI qui exigent l&#39;authentification
+(c&#39;est-à-dire que l&#39;utilisateur soit logué).  En pratique, s&#39;abonne au store
+pour suivre son état de connexion, auquel cas on <em>rendere</em> les <em>children</em> ou,
+à défaut, le contenu de la route de layout qui nous utilise (ce qui permet
+notamment notre utilisation comme groupement de routes authentifiées au sein
+d&#39;un <code>&lt;Routes&gt;</code>).  Si on n&#39;est pas logué, on <em>rendere</em> le <code>&lt;Navigate/&gt;</code> de
+React Router, qui nous ramène immédiatement à l&#39;URL racine, donc à l&#39;écran de
+connexion.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { Navigate, Outlet } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-router-dom'</span>
+<span class="hljs-keyword">import</span> { node } <span class="hljs-keyword">from</span> <span class="hljs-string">'prop-types'</span>
+<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> { useSelector } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-redux'</span>
+
+export default function RequireAuth({ children }) {
+  const loggedIn = useSelector(selectLoggedIn)
+  if (!loggedIn) {
+    return &lt;Navigate to=<span class="hljs-string">'/'</span> /&gt;
+  }
+
+  return children ?? &lt;Outlet /&gt;
+}
+
+RequireAuth.propTypes = {
+  children: node,
+}
+
+const selectLoggedIn = (state) =&gt; state.currentUser.loginState === <span class="hljs-string">'logged-in'</span></div></div></div></div></body></html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="en"><head><title>history/HistoryDay.spec</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="history/HistoryDay.spec"><meta name="groc-project-path" content="src/history/HistoryDay.spec.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/history/HistoryDay.spec.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="journe-dhistorique-tests">Journée d’historique (tests)</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { render } <span class="hljs-keyword">from</span> <span class="hljs-string">'@testing-library/react'</span>
+
+<span class="hljs-keyword">import</span> HistoryDay <span class="hljs-keyword">from</span> <span class="hljs-string">'./HistoryDay'</span>
+
+describe(<span class="hljs-string">'&lt;HistoryDay /&gt;'</span>, () =&gt; {
+  const goals = [
+    {
+      id: <span class="hljs-string">'5bf57a79890a6e2c11ec9665'</span>,
+      name: <span class="hljs-string">'Demo goal 1'</span>,
+      target: 5,
+      units: <span class="hljs-string">'wombats'</span>,
+    },
+    {
+      id: <span class="hljs-string">'5bf57a79890a6e2c11ec9666'</span>,
+      name: <span class="hljs-string">'Demo goal 2'</span>,
+      target: 10,
+      units: <span class="hljs-string">'weazels'</span>,
+    },
+  ]
+
+  it(<span class="hljs-string">'should otherwise match the expected snapshot'</span>, () =&gt; {
+    const stats = { date: <span class="hljs-string">'2017-03-23'</span>, progresses: { 0: [1, 5] } }
+    const { container } = render(&lt;HistoryDay goals={goals} stats={stats} /&gt;)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On se contente de comparer le rendu à un
+<a href="https://jestjs.io/docs/en/snapshot-testing"><em>snapshot</em></a> pris en
+développement quand le composant fonctionnait comme prévu.</p></div></div><div class="code"><div class="wrapper">    expect(container).toMatchSnapshot()
+  })
+})</div></div></div></div></body></html>

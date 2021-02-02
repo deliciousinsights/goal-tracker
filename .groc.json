@@ -1,0 +1,5 @@
+{
+  "glob": ["src/**/*.js", "package.json"],
+  "github": false,
+  "--no-strip": true
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="en"><head><title>reducers/currentUser.spec</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="reducers/currentUser.spec"><meta name="groc-project-path" content="src/reducers/currentUser.spec.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/reducers/currentUser.spec.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="utilisateur-courant-tests">Utilisateur courant (tests)</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> reducer, {
+  logInFailure,
+  logInStart,
+  logInSuccess,
+  logOut,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'./currentUser'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Le <em>reducer</em> est censé…</p></div></div><div class="code"><div class="wrapper">describe(<span class="hljs-string">'Current User reducer'</span>, () =&gt; {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="fournir-son-tat-par-dfaut">…fournir son état par défaut</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper">  it(<span class="hljs-string">'should return its initial state'</span>, () =&gt; {
+    <span class="hljs-keyword">const</span> initialState = <span class="hljs-literal">undefined</span>
+    <span class="hljs-keyword">const</span> expectedState = { loginState: <span class="hljs-string">'logged-out'</span> }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On teste toujours que l’état par défaut est bien fourni.  Le plus simple
+consiste à envoyer un état <code>undefined</code> et une action vide, et à vérifier
+le résultat (ici, un état non connecté).</p></div></div><div class="code"><div class="wrapper">    expect(reducer(initialState, {})).toEqual(expectedState)
+  })</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="grer-la-connexion">…gérer la connexion</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper">  it(<span class="hljs-string">'should handle login steps'</span>, () =&gt; {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Toujours pareil :</p>
+<p>1) On définit l’état initial et les constituants de l&#39;action</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">const</span> initialState = { loginState: <span class="hljs-string">'logged-out'</span> }
+    <span class="hljs-keyword">const</span> email = <span class="hljs-string">'john@example.com'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>2) On appelle le <em>reducer</em> avec un état préalable approprié
+   (<code>initialState</code>) et l&#39;action <strong>créée par le creator</strong> (ce qui fait une
+   sorte de test combiné du <em>action creator</em>).  Et on vérifie le segment
+   d&#39;état obtenu en retour.</p></div></div><div class="code"><div class="wrapper">    expect(reducer(initialState, logInStart())).toEqual({
+      loginState: <span class="hljs-string">'pending'</span>,
+    })
+
+    expect(reducer(initialState, logInSuccess({ email }))).toEqual({
+      loginState: <span class="hljs-string">'logged-in'</span>,
+      email,
+    })
+
+    expect(reducer(initialState, logInFailure())).toEqual({
+      loginState: <span class="hljs-string">'failure'</span>,
+    })
+  })</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="grer-la-dconnexion">…gérer la déconnexion</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper">  it(<span class="hljs-string">'should handle logout'</span>, () =&gt; {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On prend un état opposé (connecté) et on vérifit le résultat, donc un
+état non connecté.</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">const</span> initialState = { loginState: <span class="hljs-string">'logged-in'</span>, email: <span class="hljs-string">'john@example.com'</span> }
+    <span class="hljs-keyword">const</span> expectedState = { loginState: <span class="hljs-string">'logged-out'</span> }
+
+    expect(reducer(initialState, logOut())).toEqual(expectedState)
+  })</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Remarquez qu&#39;on pourrait aussi, par acquis de conscience, tester que pour
+toute action non gérée, l&#39;état est préservé.  À vous de jouer ?</p></div></div><div class="code"><div class="wrapper">})</div></div></div></div></body></html>

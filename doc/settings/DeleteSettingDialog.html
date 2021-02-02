@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en"><head><title>settings/DeleteSettingDialog</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="settings/DeleteSettingDialog"><meta name="groc-project-path" content="src/settings/DeleteSettingDialog.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/settings/DeleteSettingDialog.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="suppression-de-paramtre">Suppression de paramètre</h1></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>C’est en fait une boîte de dialogue, inclue d’office dans le conteneur parent
+(<code>SettingsScreen</code>), et qui va donc être initialement <em>rendered</em> sans objectif
+(<code>goal</code>), puis verra ses propriétés mises à jour à chaque utilisation.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> Button <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Button'</span>
+<span class="hljs-keyword">import</span> Clear <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/icons-material/Clear'</span>
+<span class="hljs-keyword">import</span> Dialog <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Dialog'</span>
+<span class="hljs-keyword">import</span> DialogActions <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/DialogActions'</span>
+<span class="hljs-keyword">import</span> DialogContent <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/DialogContent'</span>
+<span class="hljs-keyword">import</span> DialogContentText <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/DialogContentText'</span>
+<span class="hljs-keyword">import</span> DialogTitle <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/DialogTitle'</span>
+<span class="hljs-keyword">import</span> useMediaQuery <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/useMediaQuery'</span>
+
+<span class="hljs-keyword">import</span> {
+  bool,
+  exact,
+  func,
+  GoalPropType,
+  oneOfType,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'../shared/prop-types'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Il y a vraiment quelque chose de délicieux dans la déstructuration, surtout
+pour un argument objet et en ajoutant des valeurs par défaut, comme ici…</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">DeleteSettingDialog</span>(<span class="hljs-params">{
+  goal = {},
+  onCancel,
+  onClosed,
+  onDelete,
+  open,
+}</span>) </span>{
+  <span class="hljs-keyword">const</span> smallViewport = useMediaQuery(<span class="hljs-string">'(max-width: 480px)'</span>)
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Dialog</span>
+      <span class="hljs-attribute">aria-labelledby</span>=<span class="hljs-value">'deleteGoalTitle'</span>
+      <span class="hljs-attribute">fullScreen</span>=<span class="hljs-value">{smallViewport}</span>
+      <span class="hljs-attribute">onClose</span>=<span class="hljs-value">{onCancel}</span>
+      <span class="hljs-attribute">open</span>=<span class="hljs-value">{open}</span>
+      <span class="hljs-attribute">TransitionProps</span>=<span class="hljs-value">{{</span>
+        <span class="hljs-attribute">onExited:</span> <span class="hljs-attribute">onClosed</span>,
+      }}
+    &gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">DialogTitle</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">'deleteGoalTitle'</span>&gt;</span>Supprimer un objectif<span class="hljs-tag">&lt;/<span class="hljs-title">DialogTitle</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">DialogContent</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">DialogContentText</span>&gt;</span>
+          Supprimer l’objectif {`« ${goal.name} » ?`}
+        <span class="hljs-tag">&lt;/<span class="hljs-title">DialogContentText</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">DialogContent</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">DialogActions</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Button</span> <span class="hljs-attribute">color</span>=<span class="hljs-value">'secondary'</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{onCancel}</span>&gt;</span>
+          Ouh là, non !
+        <span class="hljs-tag">&lt;/<span class="hljs-title">Button</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Button</span> <span class="hljs-attribute">color</span>=<span class="hljs-value">'primary'</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{onDelete}</span> <span class="hljs-attribute">startIcon</span>=<span class="hljs-value">{&lt;Clear</span> /&gt;</span>}&gt;
+          Adios !
+        <span class="hljs-tag">&lt;/<span class="hljs-title">Button</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">DialogActions</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">Dialog</span>&gt;</span>
+  )</span>
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Comme pour tous les composants, la bonne pratique consiste à expliciter les
+propriétés autorisées.</p></div></div><div class="code"><div class="wrapper">DeleteSettingDialog.propTypes = {
+  goal: oneOfType([GoalPropType, exact({})]),
+  onCancel: func.isRequired,
+  onClosed: func,
+  onDelete: func.isRequired,
+  open: bool.isRequired,
+}</div></div></div></div></body></html>

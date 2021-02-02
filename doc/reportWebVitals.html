@@ -1,0 +1,13 @@
+<!DOCTYPE html><html lang="en"><head><title>reportWebVitals</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="reportWebVitals"><meta name="groc-project-path" content="src/reportWebVitals.js"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/reportWebVitals.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">const</span> reportWebVitals = (onPerfEntry) =&gt; {
+  <span class="hljs-keyword">if</span> (onPerfEntry &amp;&amp; onPerfEntry <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Function</span>) {
+    <span class="hljs-keyword">import</span>(<span class="hljs-string">'web-vitals'</span>).then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) =&gt; {
+      getCLS(onPerfEntry)
+      getFID(onPerfEntry)
+      getFCP(onPerfEntry)
+      getLCP(onPerfEntry)
+      getTTFB(onPerfEntry)
+    })
+  }
+}
+
+export default reportWebVitals</div></div></div></div></body></html>

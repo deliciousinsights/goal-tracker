@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="en"><head><title>history/HistoryDay</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="history/HistoryDay"><meta name="groc-project-path" content="src/history/HistoryDay.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/history/HistoryDay.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="journe-dhistorique">Journée d’historique</h1>
+<p>Section de l&#39;écran d’historique, dédiée à un jour précis.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> Divider <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Divider'</span>
+<span class="hljs-keyword">import</span> List <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/List'</span>
+<span class="hljs-keyword">import</span> Typography <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Typography'</span>
+
+<span class="hljs-keyword">import</span> {
+  arrayOf,
+  GoalPropType,
+  HistoryDayStatsPropType,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'../shared/prop-types'</span>
+<span class="hljs-keyword">import</span> { formatDate } <span class="hljs-keyword">from</span> <span class="hljs-string">'../lib/helpers'</span>
+<span class="hljs-keyword">import</span> HistoryDayGoal <span class="hljs-keyword">from</span> <span class="hljs-string">'./HistoryDayGoal'</span>
+
+export default function HistoryDay({ goals, stats: { date, progresses } }) {
+  return (
+    &lt;div&gt;
+      &lt;Divider /&gt;
+      &lt;List&gt;
+        &lt;Typography variant=<span class="hljs-string">'subtitle1'</span>&gt;{formatDate(date)}&lt;/Typography&gt;
+        {goals.map((goal) =&gt; {
+          const goalStats = progresses[goal.id]
+          if (goalStats) {
+            return (
+              &lt;HistoryDayGoal key={goal.id} goal={goal} stats={goalStats} /&gt;
+            )
+          }
+          return null
+        })}
+      &lt;/List&gt;
+    &lt;/div&gt;
+  )
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Comme toujours, on définit les propriétés attendues/autorisées pour
+validation.</p></div></div><div class="code"><div class="wrapper">HistoryDay.propTypes = {
+  goals: arrayOf(GoalPropType).isRequired,
+  stats: HistoryDayStatsPropType.isRequired,
+}</div></div></div></div></body></html>

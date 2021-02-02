@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="en"><head><title>reducers/goals</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="reducers/goals"><meta name="groc-project-path" content="src/reducers/goals.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/reducers/goals.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="objectifs-reducer">Objectifs (reducer)</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { createAction, createReducer } <span class="hljs-keyword">from</span> <span class="hljs-string">'@reduxjs/toolkit'</span>
+<span class="hljs-keyword">import</span> ObjectID <span class="hljs-keyword">from</span> <span class="hljs-string">'bson-objectid'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><em>(Structuration de type
+<a href="https://github.com/erikras/ducks-modular-redux">Ducks</a>)</em></p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="action-creators">Action Creators</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> addGoal = createAction(
+  <span class="hljs-string">'goal-tracker/goals/addGoal'</span>,
+  (payload) =&gt; ({ payload: { ...payload, id: ObjectID().toHexString() } })
+)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> removeGoal = createAction(<span class="hljs-string">'goal-tracker/goals/removeGoal'</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> updateGoal = createAction(<span class="hljs-string">'goal-tracker/goals/updateGoal'</span>)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="rducteur">Réducteur</h2></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Par défaut, <code>goals</code> vaut <code>[]</code> (pas d’objectifs définis)</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> createReducer([], (builder) =&gt; {
+  builder
+    .addCase(addGoal, (state, { payload }) =&gt; {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Remarquez que grâce à l&#39;enrobage automatique de nos réducteurs par
+Immer, on peut se payer le luxe d&#39;utiliser du code mutatif si c&#39;est
+plus simple, sans perdre en immuabilité réelle !</p></div></div><div class="code"><div class="wrapper">      state.push(payload)
+    })
+    .addCase(removeGoal, (state, { payload }) =&gt; {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Ici et en-dessous en revanche, l&#39;approche immuable, à base de <code>filter</code>
+et de <code>map</code>, est plus concise qu&#39;une approche mutative, alors pourquoi
+s&#39;en priver ?</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">return</span> state.filter(({ id }) =&gt; id !== payload.id)
+    })
+    .addCase(updateGoal, (state, action) =&gt; {
+      <span class="hljs-keyword">return</span> state.map((goal) =&gt;
+        goal.id === action.payload.id ? action.payload : goal
+      )
+    })
+})</div></div></div></div></body></html>

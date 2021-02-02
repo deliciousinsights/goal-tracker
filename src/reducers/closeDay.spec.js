@@ -1,5 +1,5 @@
-// Historisation quotidienne (spec reducer)
-// ========================================
+// Historisation quotidienne (tests)
+// =================================
 
 import { isoDate } from '../lib/helpers'
 import reducer, { closeDay } from './closeDay'

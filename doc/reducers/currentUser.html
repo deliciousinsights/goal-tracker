@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="en"><head><title>reducers/currentUser</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="reducers/currentUser"><meta name="groc-project-path" content="src/reducers/currentUser.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/reducers/currentUser.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="utilisateur-courant-reducer">Utilisateur courant (reducer)</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { createAction, createReducer } <span class="hljs-keyword">from</span> <span class="hljs-string">'@reduxjs/toolkit'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="action-creators">Action Creators</h2></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Et voici un <em>action creator</em> <strong>asynchrone</strong> !  Cette action de login se fera
+sur notre serveur de dev, via une requête Fetch, et ne peut donc se contenter
+de renvoyer un objet action inerte, seule chose pourtant que Redux permet de
+base…</p>
+<p>Il existe de <a href="https://github.com/markerikson/redux-ecosystem-links/blob/master/middleware-async.md">très nombreuses
+manières</a>
+de faire de l’asynchrone avec Redux.  Ici, comme nous voulons illustrer des
+appels API et la capacité à résister à une interruption de connectivité au
+serveur, nous avons choisi le très sympathique module
+<a href="https://github.com/redux-offline/redux-offline">redux-offline</a>, lui-même une
+surcouche de l’excellent
+<a href="https://github.com/rt2zz/redux-persist">redux-persist</a>. Lorsque ce module
+est mis en place (voir <a href="./store.html">la configuration du <em>store</em></a>), on peut
+décorer des actions avec un champ <code>meta.offline</code>, lequel peut contenir des
+propriétés <code>effect</code> (qui décrit, par défaut, un appel API), <code>commit</code> (action
+à <em>dispatcher</em> en cas de réponse réseau à succès, donc codes 2xx) et
+<code>rollback</code> (action à <em>dispatcher</em> en cas de réponse réseau sans succès, donc
+codes de réponse autres, ex. 401).</p>
+<p>On a ici une action dite <em>pessimiste</em> : on doit la considérer échouée jusqu’à
+preuve du contraire (c’est un login, après tout).  On finalise donc le login
+via l’action <code>loginSuccess</code>, dans le descripteur <code>commit</code>.  Le descripteur
+<code>rollback</code> déclenche une <code>loginFailure</code> qui permettra d’afficher une
+<em>snackbar</em> d’erreur dans l’écran de connexion.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">logIn</span>(<span class="hljs-params">{ email, password }</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: logInStart.toString(),
+    meta: {
+      offline: {
+        effect: {
+          json: { email, password },
+          method: <span class="hljs-string">'POST'</span>,
+          url: <span class="hljs-string">`http://<span class="hljs-subst">${window.location.hostname}</span>:3001/api/v1/sessions`</span>,
+        },
+        commit: { type: logInSuccess.toString() },
+        rollback: { type: logInFailure.toString() },
+      },
+    },
+  }
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Notez que ces actions synchrones « d’étapes » pour le login (asynchrone) sont
+exportées juste histoire de pouvoir les traiter dans les tests du réducteur
+associé.  Notre code « de production » pourrait se passer des exports.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> logInStart = createAction(<span class="hljs-string">'goal-tracker/currentUser/logInStart'</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> logInSuccess = createAction(
+  <span class="hljs-string">'goal-tracker/currentUser/logInSuccess'</span>
+)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> logInFailure = createAction(
+  <span class="hljs-string">'goal-tracker/currentUser/logInFailure'</span>
+)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> logOut = createAction(<span class="hljs-string">'goal-tracker/currentUser/logOut'</span>)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="rducteur">Réducteur</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> createReducer({ loginState: <span class="hljs-string">'logged-out'</span> }, (builder) =&gt; {
+  builder
+    .addCase(logInStart, () =&gt; ({ loginState: <span class="hljs-string">'pending'</span> }))
+    .addCase(logInFailure, () =&gt; ({ loginState: <span class="hljs-string">'failure'</span> }))
+    .addCase(logInSuccess, (state, { payload: { email } }) =&gt; ({
+      loginState: <span class="hljs-string">'logged-in'</span>,
+      email,
+    }))
+    .addCase(logOut, () =&gt; ({ loginState: <span class="hljs-string">'logged-out'</span> }))
+})</div></div></div></div></body></html>

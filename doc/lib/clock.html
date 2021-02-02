@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="en"><head><title>lib/clock</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="lib/clock"><meta name="groc-project-path" content="src/lib/clock.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/lib/clock.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="rinitialisation-quotidienne">Réinitialisation quotidienne</h1></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Les progrès du jour sont réinitialisés tous les soirs à minuit, après avoir
+été ajoutés à l’historique.  Par ailleurs, lorsque l’application se  lance,
+si la journée “en cours” dans l’état global est désormais passée, une
+historisation est immédiatement déclenchée.</p>
+<p>C’est en fait le <em>reducer</em> consolidé qui fait tout le boulot côté données :
+ce module est surtout charger de déclencher (<code>store.dispatch(…)</code>) la bonne
+action (<code>CLOSE_DAY</code>) au bon moment, et de notifier l’utilisateur.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { addSeconds, differenceInCalendarDays, parseISO } <span class="hljs-keyword">from</span> <span class="hljs-string">'date-fns'</span>
+
+<span class="hljs-keyword">import</span> clockIcon <span class="hljs-keyword">from</span> <span class="hljs-string">'../icons/clock-reset.png'</span>
+<span class="hljs-keyword">import</span> { closeDay } <span class="hljs-keyword">from</span> <span class="hljs-string">'../reducers/closeDay'</span>
+<span class="hljs-keyword">import</span> store <span class="hljs-keyword">from</span> <span class="hljs-string">'../store'</span>
+
+const STAMP_FORMATTER = new Intl.DateTimeFormat(<span class="hljs-string">'fr-FR'</span>, {
+  hour: <span class="hljs-string">'2-digit'</span>,
+  minute: <span class="hljs-string">'2-digit'</span>,
+  second: <span class="hljs-string">'2-digit'</span>,
+})</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Activation du vérificateur d&#39;historisation et de rappels à des moments précis
+de la journée.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">const</span> clock = setInterval(checkClock, <span class="hljs-number">1000</span>)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On vérifie si on n’a pas déjà les progrès d’une journée désormais passée dans
+l’état global, auquel cas il faut commencer par l’historiser.</p></div></div><div class="code"><div class="wrapper">checkForTodaysFirstUse()
+
+<span class="hljs-keyword">if</span> (<span class="hljs-built_in">module</span>.hot) {
+  <span class="hljs-built_in">module</span>.hot.accept()</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Le HMR sur ce module doit prendre soin d’annuler l’intervalle de
+vérification en vigueur, puisque l’initialisation de la nouvelle version du
+module va en ré-inscrire un tout de suite.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-built_in">module</span>.hot.dispose(() =&gt; {
+    clearInterval(clock)
+  })
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>En production, on réinitialise à minuit.  En développement, 5 secondes après
+le chargement, c’est plus pratique pour les tests interactifs…</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">const</span> HISTORY_TRIGGER_TIME =
+  process.env.NODE_ENV === <span class="hljs-string">'production'</span>
+    ? <span class="hljs-string">'00:00:00'</span>
+    : STAMP_FORMATTER.format(addSeconds(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(), <span class="hljs-number">5</span>))</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="vrification-des-chances">Vérification des échéances</h2></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Quand la webapp est ouverte, on vérifie chaque seconde si on a atteint une
+échéance de réinitialisation ou de rappel.  Si tel est le cas, on agit.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkClock</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> now = STAMP_FORMATTER.format(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>())
+
+  <span class="hljs-keyword">if</span> (now === HISTORY_TRIGGER_TIME) {
+    closePreviousDay()
+  }
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="historisation-au-dmarrage">Historisation au démarrage</h2></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Au démarrage de la webapp, quand ce module est initialisé, on s&#39;abonne au
+store en attente de sa réhydratation éventulle depuis la sauvegarde d&#39;état
+applicatif côté client.   Car avant la réhydratation, notre état par défaut
+serait forcément sur aujourd&#39;hui, donc sans besoin d&#39;historisation.  Une fois
+qu&#39;on est réhydratés, on peut vérifier si la journée “en cours” de l’état
+central n’est pas passée, ce qui veut dire que la webapp n’était pas ouverte
+à minuit cette journée-là, et que l’historisation reste à faire; On la
+déclenche donc.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkForTodaysFirstUse</span>(<span class="hljs-params"></span>) </span>{</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Afin de pouvoir se désabonner dès qu&#39;on détecte la réhydratation, on
+récupère la fonction de désabonnement renvoyée par <code>subscribe()</code> pour
+pouvoir l&#39;appeler le moment venu.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">const</span> unsub = store.subscribe(() =&gt; {
+    <span class="hljs-keyword">const</span> { config, today } = store.getState()
+    <span class="hljs-keyword">if</span> (!config.rehydrated) {
+      <span class="hljs-keyword">return</span>
+    }
+
+    unsub()
+
+    <span class="hljs-keyword">const</span> storesLastDay = parseISO(today)
+    <span class="hljs-keyword">if</span> (differenceInCalendarDays(storesLastDay, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()) &lt; <span class="hljs-number">0</span>) {
+      closePreviousDay()
+    }
+  })
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="fonctions-utilitaires">Fonctions utilitaires</h2></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Déclenchement de l’historisation auprès du <em>store</em> central, et notification
+si on en a le droit.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">closePreviousDay</span>(<span class="hljs-params"></span>) </span>{
+  store.dispatch(closeDay())
+
+  notify({
+    title: <span class="hljs-string">'Fin de journée !'</span>,
+    text: <span class="hljs-string">'Vos objectifs ont été historisés et repartent à zéro.'</span>,</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Remarquez qu’ici <code>clockIcon</code> est en fait une URL, obtenue via l’<code>import</code>
+grâce aux <a href="https://github.com/webpack/url-loader"><code>url-loader</code></a> et
+<a href="https://github.com/webpack/file-loader"><code>file-loader</code></a> de Webpack.  Si
+le PNG correspondant faisait moins de 10Ko, il aurait même était injecté
+sous forme base64 plutôt que comme un fichier distinct, économisant une
+requête HTTP.</p></div></div><div class="code"><div class="wrapper">    icon: clockIcon,
+    secondsVisible: <span class="hljs-number">4</span>,
+  })
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Notification générique avec fermeture automatique.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">notify</span>(<span class="hljs-params">{ title, text, icon, secondsVisible = 0 }</span>) </span>{
+  <span class="hljs-keyword">if</span> (!store.getState().config.canNotify) {
+    <span class="hljs-keyword">return</span>
+  }
+
+  <span class="hljs-keyword">const</span> requireInteraction =
+    <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span>.Notification.prototype.close === <span class="hljs-string">'function'</span> &amp;&amp;
+    secondsVisible &gt; <span class="hljs-number">0</span>
+  <span class="hljs-keyword">const</span> notif = <span class="hljs-keyword">new</span> <span class="hljs-built_in">window</span>.Notification(title, {
+    body: text,
+    icon,
+    lang: <span class="hljs-string">'fr'</span>,
+    requireInteraction,
+    tag: <span class="hljs-string">'goal-tracker'</span>,
+    vibrate: [<span class="hljs-number">100</span>, <span class="hljs-number">50</span>, <span class="hljs-number">100</span>, <span class="hljs-number">50</span>, <span class="hljs-number">100</span>],
+  })
+
+  <span class="hljs-keyword">if</span> (requireInteraction) {
+    notif.addEventListener(<span class="hljs-string">'show'</span>, () =&gt; {
+      setTimeout(() =&gt; notif.close(), secondsVisible * <span class="hljs-number">1000</span>)
+    })
+  }
+}</div></div></div></div></body></html>

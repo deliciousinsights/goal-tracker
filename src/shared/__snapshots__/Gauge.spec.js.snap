@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Gauge /> should otherwise match the expected snapshot 1`] = `
+exports[`<Gauge /> should otherwise match the expected snapshots 1`] = `
 <div>
   <span
     aria-valuemax="100"

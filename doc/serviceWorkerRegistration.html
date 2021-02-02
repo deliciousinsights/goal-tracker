@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="en"><head><title>serviceWorkerRegistration</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="serviceWorkerRegistration"><meta name="groc-project-path" content="src/serviceWorkerRegistration.js"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/serviceWorkerRegistration.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><p>This optional code is used to register a service worker.
+register() is not called by default.</p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>This lets the app load faster on subsequent visits in production, and gives
+it offline capabilities. However, it also means that developers (and users)
+will only see deployed updates on subsequent visits to a page, after all the
+existing tabs open on the page have been closed, since previously cached
+resources are updated in the background.</p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>To learn more about the benefits of this model and instructions on how to
+opt-in, read <a href="https://cra.link/PWA">https://cra.link/PWA</a></p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">const</span> isLocalhost = <span class="hljs-built_in">Boolean</span>(
+  <span class="hljs-built_in">window</span>.location.hostname === <span class="hljs-string">'localhost'</span> ||</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>[::1] is the IPv6 localhost address.</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-built_in">window</span>.location.hostname === <span class="hljs-string">'[::1]'</span> ||</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>127.0.0.0/8 are considered localhost for IPv4.</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-built_in">window</span>.location.hostname.match(<span class="hljs-regexp">/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/</span>)
+);
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">register</span>(<span class="hljs-params">config</span>) </span>{
+  <span class="hljs-keyword">if</span> (process.env.NODE_ENV === <span class="hljs-string">'production'</span> &amp;&amp; <span class="hljs-string">'serviceWorker'</span> <span class="hljs-keyword">in</span> navigator) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>The URL constructor is available in all browsers that support SW.</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">const</span> publicUrl = <span class="hljs-keyword">new</span> URL(process.env.PUBLIC_URL, <span class="hljs-built_in">window</span>.location.href);
+    <span class="hljs-keyword">if</span> (publicUrl.origin !== <span class="hljs-built_in">window</span>.location.origin) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Our service worker won&#39;t work if PUBLIC_URL is on a different origin
+from what our page is served on. This might happen if a CDN is used to
+serve assets; see <a href="https://github.com/facebook/create-react-app/issues/2374">https://github.com/facebook/create-react-app/issues/2374</a></p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">'load'</span>, () =&gt; {
+      <span class="hljs-keyword">const</span> swUrl = <span class="hljs-string">`<span class="hljs-subst">${process.env.PUBLIC_URL}</span>/service-worker.js`</span>;
+
+      <span class="hljs-keyword">if</span> (isLocalhost) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>This is running on localhost. Let&#39;s check if a service worker still exists or not.</p></div></div><div class="code"><div class="wrapper">        checkValidServiceWorker(swUrl, config);</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Add some additional logging to localhost, pointing developers to the
+service worker/PWA documentation.</p></div></div><div class="code"><div class="wrapper">        navigator.serviceWorker.ready.then(() =&gt; {
+          <span class="hljs-built_in">console</span>.log(
+            <span class="hljs-string">'This web app is being served cache-first by a service '</span> +
+              <span class="hljs-string">'worker. To learn more, visit https://cra.link/PWA'</span>
+          );
+        });
+      } <span class="hljs-keyword">else</span> {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Is not localhost. Just register service worker</p></div></div><div class="code"><div class="wrapper">        registerValidSW(swUrl, config);
+      }
+    });
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">registerValidSW</span>(<span class="hljs-params">swUrl, config</span>) </span>{
+  navigator.serviceWorker
+    .register(swUrl)
+    .then((registration) =&gt; {
+      registration.onupdatefound = () =&gt; {
+        <span class="hljs-keyword">const</span> installingWorker = registration.installing;
+        <span class="hljs-keyword">if</span> (installingWorker == <span class="hljs-literal">null</span>) {
+          <span class="hljs-keyword">return</span>;
+        }
+        installingWorker.onstatechange = () =&gt; {
+          <span class="hljs-keyword">if</span> (installingWorker.state === <span class="hljs-string">'installed'</span>) {
+            <span class="hljs-keyword">if</span> (navigator.serviceWorker.controller) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>At this point, the updated precached content has been fetched,
+but the previous service worker will still serve the older
+content until all client tabs are closed.</p></div></div><div class="code"><div class="wrapper">              <span class="hljs-built_in">console</span>.log(
+                <span class="hljs-string">'New content is available and will be used when all '</span> +
+                  <span class="hljs-string">'tabs for this page are closed. See https://cra.link/PWA.'</span>
+              );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Execute callback</p></div></div><div class="code"><div class="wrapper">              <span class="hljs-keyword">if</span> (config &amp;&amp; config.onUpdate) {
+                config.onUpdate(registration);
+              }
+            } <span class="hljs-keyword">else</span> {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>At this point, everything has been precached.
+It&#39;s the perfect time to display a
+&quot;Content is cached for offline use.&quot; message.</p></div></div><div class="code"><div class="wrapper">              <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Content is cached for offline use.'</span>);</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Execute callback</p></div></div><div class="code"><div class="wrapper">              <span class="hljs-keyword">if</span> (config &amp;&amp; config.onSuccess) {
+                config.onSuccess(registration);
+              }
+            }
+          }
+        };
+      };
+    })
+    .catch((error) =&gt; {
+      <span class="hljs-built_in">console</span>.error(<span class="hljs-string">'Error during service worker registration:'</span>, error);
+    });
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkValidServiceWorker</span>(<span class="hljs-params">swUrl, config</span>) </span>{</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Check if the service worker can be found. If it can&#39;t reload the page.</p></div></div><div class="code"><div class="wrapper">  fetch(swUrl, {
+    headers: { <span class="hljs-string">'Service-Worker'</span>: <span class="hljs-string">'script'</span> },
+  })
+    .then((response) =&gt; {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Ensure service worker exists, and that we really are getting a JS file.</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">const</span> contentType = response.headers.get(<span class="hljs-string">'content-type'</span>);
+      <span class="hljs-keyword">if</span> (
+        response.status === <span class="hljs-number">404</span> ||
+        (contentType != <span class="hljs-literal">null</span> &amp;&amp; contentType.indexOf(<span class="hljs-string">'javascript'</span>) === -<span class="hljs-number">1</span>)
+      ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>No service worker found. Probably a different app. Reload the page.</p></div></div><div class="code"><div class="wrapper">        navigator.serviceWorker.ready.then((registration) =&gt; {
+          registration.unregister().then(() =&gt; {
+            <span class="hljs-built_in">window</span>.location.reload();
+          });
+        });
+      } <span class="hljs-keyword">else</span> {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Service worker found. Proceed as normal.</p></div></div><div class="code"><div class="wrapper">        registerValidSW(swUrl, config);
+      }
+    })
+    .catch(() =&gt; {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'No internet connection found. App is running in offline mode.'</span>);
+    });
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unregister</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">if</span> (<span class="hljs-string">'serviceWorker'</span> <span class="hljs-keyword">in</span> navigator) {
+    navigator.serviceWorker.ready
+      .then((registration) =&gt; {
+        registration.unregister();
+      })
+      .catch((error) =&gt; {
+        <span class="hljs-built_in">console</span>.error(error.message);
+      });
+  }
+}</div></div></div></div></body></html>

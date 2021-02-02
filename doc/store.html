@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en"><head><title>store</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="store"><meta name="groc-project-path" content="src/store.js"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/store.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="tat-applicatif">État applicatif</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { configureStore } <span class="hljs-keyword">from</span> <span class="hljs-string">'@reduxjs/toolkit'</span>
+<span class="hljs-keyword">import</span> { offline } <span class="hljs-keyword">from</span> <span class="hljs-string">'@redux-offline/redux-offline'</span>
+
+<span class="hljs-keyword">import</span> DEFAULT_STATE <span class="hljs-keyword">from</span> <span class="hljs-string">'./default-state'</span>
+<span class="hljs-keyword">import</span> goalTrackerReducer <span class="hljs-keyword">from</span> <span class="hljs-string">'./reducers'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Définition de l&#39;état par défaut (hors hydratation).  En production, on
+partira sur un état vide, tous les réducteurs de tranches Redux posant alors
+leurs valeurs par défaut granulaires.</p>
+<p>L&#39;import statique de <code>DEFAULT_STATE</code>, plutôt qu&#39;un import dynamique, peut
+sembler ajouter du poids au bundle, mais en réalité c&#39;est préférable : non
+seulemment le ternaire ci-dessous va s&#39;inliner en <code>{}</code> dans un build de
+production, entraînant <em>de facto</em> la purge de l&#39;import lors de l&#39;élimination
+de code mort, mais en prime il évite un <em>code splitting</em> superflu en
+développement.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">const</span> state = process.env.NODE_ENV === <span class="hljs-string">'production'</span> ? {} : DEFAULT_STATE</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Cet export nous permet de construire facilement un <em>store</em> selon nos besoins
+(et notamment un état initial précis), par exemple lors des tests ou dans
+Storybook.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeStore</span>(<span class="hljs-params">
+  preloadedState = state,
+  { shouldPersist = process.env.NODE_ENV !== 'test' } = {}
+</span>) </span>{
+  <span class="hljs-keyword">const</span> store = configureStore({
+    preloadedState,
+    reducer: goalTrackerReducer,</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Le typage de redux-offline n&#39;est pas au cordeau, un affinage par
+annotation de type est nécessaire.</p></div></div><div class="code"><div class="wrapper">    enhancers: shouldPersist ? [offline({})] : [],
+  })</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Gestion du HMR sur les réducteurs pendant le développement.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">if</span> (process.env.NODE_ENV !== <span class="hljs-string">'production'</span> &amp;&amp; <span class="hljs-built_in">module</span>.hot) {
+    <span class="hljs-built_in">module</span>.hot.accept(<span class="hljs-string">'./reducers'</span>, () =&gt;
+      store.replaceReducer(goalTrackerReducer)
+    )
+  }
+
+  <span class="hljs-keyword">return</span> store
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Création de l&#39;état par défaut (pour le dev et la prod principalement, les tests
+et Storybook créeraient les leurs sur-mesure selon leurs besoins.)</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">const</span> store = makeStore()</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Le store pour le dev / la prod est l&#39;export par défaut.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> store</div></div></div></div></body></html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="en"><head><title>shared/Gauge.spec</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="shared/Gauge.spec"><meta name="groc-project-path" content="src/shared/Gauge.spec.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/shared/Gauge.spec.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="jauge-tests">Jauge (tests)</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { render, screen } <span class="hljs-keyword">from</span> <span class="hljs-string">'@testing-library/react'</span>
+
+<span class="hljs-keyword">import</span> Gauge <span class="hljs-keyword">from</span> <span class="hljs-string">'./Gauge'</span>
+
+describe(<span class="hljs-string">'&lt;Gauge /&gt;'</span>, () =&gt; {
+  it(<span class="hljs-string">'should render appropriately'</span>, () =&gt; {
+    render(&lt;Gauge value={50} /&gt;)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On récupère le composant dont le rôle est une barre de progression
+(défini en interne par le <code>&lt;LinearProgress/&gt;</code> au sein de <code>&lt;Gauge/&gt;</code>).</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">const</span> progressBar = screen.getByRole(<span class="hljs-string">'progressbar'</span>)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On vérifie qu’il est bien en mode “determinate” (la barre ne cycle pas)</p></div></div><div class="code"><div class="wrapper">    expect(progressBar).toHaveClass(<span class="hljs-string">'MuiLinearProgress-determinate'</span>)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On vérifie que notre style personnalisé est appliqué.</p></div></div><div class="code"><div class="wrapper">    expect(progressBar).toHaveStyle({ height: <span class="hljs-string">'8px'</span> })</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On vérifie la valeur normalisée</p></div></div><div class="code"><div class="wrapper">    expect(progressBar).toHaveAttribute(<span class="hljs-string">'aria-valuenow'</span>, <span class="hljs-string">'50'</span>)
+  })
+
+  it(<span class="hljs-string">'should normalize value on custom max'</span>, () =&gt; {
+    render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Gauge</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{20}</span> <span class="hljs-attribute">max</span>=<span class="hljs-value">{80}</span> /&gt;</span>)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On vérifie la valeur normalisée</p></div></div><div class="code"><div class="wrapper">    expect(screen.getByRole(<span class="hljs-string">'progressbar'</span>)).toHaveAttribute(
+      <span class="hljs-string">'aria-valuenow'</span>,
+      <span class="hljs-string">'25'</span>
+    )
+  })
+
+  it(<span class="hljs-string">'should otherwise match the expected snapshots'</span>, () =&gt; {
+    <span class="hljs-keyword">const</span> { container } = render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Gauge</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{50}</span> /&gt;</span>)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On se contente de comparer le rendu à un
+<a href="https://jestjs.io/docs/en/snapshot-testing"><em>snapshot</em></a> pris en
+développement quand le composant fonctionnait comme prévu.</p></div></div><div class="code"><div class="wrapper">    expect(container).toMatchSnapshot()
+  })
+})</div></div></div></div></body></html>

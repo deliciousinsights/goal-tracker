@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="en"><head><title>reducers/closeDay</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="reducers/closeDay"><meta name="groc-project-path" content="src/reducers/closeDay.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/reducers/closeDay.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="fermeture-de-journe-reducer">Fermeture de journée (reducer)</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { createAction, createReducer } <span class="hljs-keyword">from</span> <span class="hljs-string">'@reduxjs/toolkit'</span>
+
+<span class="hljs-keyword">import</span> { isoDate } <span class="hljs-keyword">from</span> <span class="hljs-string">'../lib/helpers'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><em>(Structuration de type
+<a href="https://github.com/erikras/ducks-modular-redux">Ducks</a>)</em></p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="types-dactions">Types d’actions</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> closeDay = createAction(
+  <span class="hljs-string">'goal-tracker/closeDay/closeDay'</span>,
+  ({ date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>() } = {}) =&gt; ({
+    payload: { date },
+  })
+)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="rducteur">Réducteur</h2></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>La valeur par défaut est gérée par le meta-réducteur dans <code>index.js</code></p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> createReducer({}, (builder) =&gt; {
+  builder.addCase(closeDay, (state, { payload }) =&gt; {
+    state.history = tallyPreviousDay(state)
+    state.today = isoDate(payload.date)
+    state.todaysProgress = {}
+  })
+})</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="calcul-de-lhistorisation">Calcul de l’historisation</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tallyPreviousDay</span>(<span class="hljs-params">{ goals, history, today, todaysProgress }</span>) </span>{
+  <span class="hljs-keyword">const</span> progresses = {}
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> { id, target } <span class="hljs-keyword">of</span> goals) {
+    <span class="hljs-keyword">const</span> progress = todaysProgress[id] || <span class="hljs-number">0</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On n’historise que les progrès non nuls…</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">if</span> (progress &gt; <span class="hljs-number">0</span>) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On n’oublie pas de préciser la valeur cible en vigueur, des fois
+qu’elle changerait par la suite.</p></div></div><div class="code"><div class="wrapper">      progresses[id] = [progress, target]
+    }
+  }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Inutile de créer des entrées d’historique vides (zéro progrès ce jour-là)</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Object</span>.keys(progresses).length === <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">return</span> history
+  }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>À ce stade, <code>today</code> n’a pas encore été modifié, il vaut le dernier jour
+pris en compte par l’état.  Il sert donc pour la date de l’entrée dans
+l’historique.  On évite de modifier l&#39;historique en place évidemment, donc
+un <em>spread</em> plutôt qu&#39;un <code>unshift</code>.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">return</span> [{ date: today, progresses }, ...history]
+}</div></div></div></div></body></html>

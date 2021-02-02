@@ -1,0 +1,18 @@
+<!DOCTYPE html><html lang="en"><head><title>reducers/todaysProgress</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="reducers/todaysProgress"><meta name="groc-project-path" content="src/reducers/todaysProgress.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/reducers/todaysProgress.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="progrs-du-jour-reducer">Progrès du jour (reducer)</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { createAction, createReducer } <span class="hljs-keyword">from</span> <span class="hljs-string">'@reduxjs/toolkit'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><em>(Structuration de type
+<a href="https://github.com/erikras/ducks-modular-redux">Ducks</a>)</em></p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="action-creators">Action Creators</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> progressOnGoal = createAction(
+  <span class="hljs-string">'goal-tracker/todaysProgress/progressOnGoal'</span>,</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pour une fois, on définit notre propre construction d&#39;action, afin de
+permettre une vaelur par défaut et une normalisation des données.</p></div></div><div class="code"><div class="wrapper">  ({ goalId, increment = <span class="hljs-number">1</span> }) =&gt; ({
+    payload: { goalId, increment: <span class="hljs-built_in">Number</span>(increment) || <span class="hljs-number">0</span> },
+  })
+)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="rducteur">Réducteur</h2></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Par défaut, <code>todaysProgress</code> vaut <code>{}</code> (les clés sont les IDs des objectifs,
+les valeurs leur progrès du jour.  Ici, pas de progrès renseignés par
+défaut.)</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> createReducer({}, (builder) =&gt; {
+  builder.addCase(
+    progressOnGoal,
+    (state, { payload: { goalId, increment } }) =&gt; {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Les <code>|| 0</code> sont pour les cas <code>undefined</code> (si pas de progrès renseigné
+jusqu’ici) et <code>NaN</code> (si <code>increment</code> n’est pas convertible en nombre
+valide).</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">const</span> previous = state[goalId] || <span class="hljs-number">0</span>
+      state[goalId] = previous + increment
+    }
+  )
+})</div></div></div></div></body></html>

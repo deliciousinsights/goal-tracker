@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="en"><head><title>history/HistoryDayGoal.spec</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="history/HistoryDayGoal.spec"><meta name="groc-project-path" content="src/history/HistoryDayGoal.spec.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/history/HistoryDayGoal.spec.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="journe-historique-dun-objectif-tests">Journée historique d’un objectif (tests)</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { render } <span class="hljs-keyword">from</span> <span class="hljs-string">'@testing-library/react'</span>
+
+<span class="hljs-keyword">import</span> HistoryDayGoal <span class="hljs-keyword">from</span> <span class="hljs-string">'./HistoryDayGoal'</span>
+
+describe(<span class="hljs-string">'&lt;HistoryDayGoal /&gt;'</span>, () =&gt; {
+  const goal = { id: <span class="hljs-string">'abcd'</span>, name: <span class="hljs-string">'Demo goal'</span>, target: 5, units: <span class="hljs-string">'wombats'</span> }
+
+  it(<span class="hljs-string">'should use proper stats propTypes'</span>, () =&gt; {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>À titre d’exemple, on teste que les validations de props sont bien mises
+en place, notamment parce qu’il s’agit d’un validateur personnalisé, et
+non d’un autre fourni par un module tiers.  Le code pour ça est tendu,
+voyez la fonction <code>checkFailPropType()</code> plus bas dans le fichier.</p></div></div><div class="code"><div class="wrapper">    checkFailPropType(<span class="hljs-string">'stats in HistoryDayGoal must be an array.'</span>, () =&gt; (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">HistoryDayGoal</span> <span class="hljs-attribute">goal</span>=<span class="hljs-value">{goal}</span> /&gt;</span>
+    )</span>)
+    checkFailPropType(
+      <span class="hljs-string">'stats in HistoryDayGoal must be a pair of integers.'</span>,
+      () =&gt; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">HistoryDayGoal</span> <span class="hljs-attribute">goal</span>=<span class="hljs-value">{goal}</span> <span class="hljs-attribute">stats</span>=<span class="hljs-value">{[42]}</span> /&gt;</span>
+    )</span>
+    checkFailPropType(
+      <span class="hljs-string">'stats in HistoryDayGoal must start with a non-negative progress value.'</span>,
+      () =&gt; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">HistoryDayGoal</span> <span class="hljs-attribute">goal</span>=<span class="hljs-value">{goal}</span> <span class="hljs-attribute">stats</span>=<span class="hljs-value">{[-1,</span> <span class="hljs-attribute">10</span>]} /&gt;</span>
+    )</span>
+    checkFailPropType(
+      <span class="hljs-string">'stats in HistoryDayGoal must end with a positive target value.'</span>,
+      () =&gt; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">HistoryDayGoal</span> <span class="hljs-attribute">goal</span>=<span class="hljs-value">{goal}</span> <span class="hljs-attribute">stats</span>=<span class="hljs-value">{[0,</span> <span class="hljs-attribute">0</span>]} /&gt;</span>
+    )</span>
+  })
+
+  it(<span class="hljs-string">'should otherwise match the expected snapshot'</span>, () =&gt; {
+    <span class="hljs-keyword">const</span> { container } = render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">HistoryDayGoal</span> <span class="hljs-attribute">goal</span>=<span class="hljs-value">{goal}</span> <span class="hljs-attribute">stats</span>=<span class="hljs-value">{[2,</span> <span class="hljs-attribute">5</span>]} /&gt;</span>)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On se contente de comparer le rendu à un
+<a href="https://jestjs.io/docs/en/snapshot-testing"><em>snapshot</em></a> pris en
+développement quand le composant fonctionnait comme prévu.</p></div></div><div class="code"><div class="wrapper">    expect(container).toMatchSnapshot()
+  })
+})</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Fonction de test d’une erreur de validation de <em>prop</em>.  Il n’existe en fait
+qu’un moyen : intercepter les appels à <code>console.error()</code> (sur l’objet global
+<code>console</code>) le temps du test, pour confirmer qu’un appel y a été fait avec un
+message adéquat.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkFailPropType</span>(<span class="hljs-params">message, block</span>) </span>{</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Tant qu’à faire, on remplace l’implémentation par du vide histoire de ne
+pas polluer notre affichage de test, dans le même esprit que l’API
+<code>sinon.stub()</code> de SinonJS.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">const</span> cErr = jest.spyOn(global.console, <span class="hljs-string">'error'</span>).mockImplementation(() =&gt; {})
+  <span class="hljs-keyword">try</span> {
+    block()
+    expect(cErr).toHaveBeenCalledWith(
+      <span class="hljs-string">'Warning: Failed %s type: %s%s'</span>,
+      <span class="hljs-string">'prop'</span>,
+      expect.stringMatching(
+        <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(message.replace(<span class="hljs-regexp">/[\].*+?(){}[]/g</span>, <span class="hljs-string">'\\$&amp;'</span>))
+      ),
+      expect.anything()
+    )
+  } <span class="hljs-keyword">finally</span> {
+    cErr.mockRestore()
+  }
+}</div></div></div></div></body></html>

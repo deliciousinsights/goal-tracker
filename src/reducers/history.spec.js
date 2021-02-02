@@ -1,5 +1,5 @@
-// Historique (spec reducer)
-// =========================
+// Historique (tests)
+// ==================
 
 import reducer, { clearHistory } from './history'
 

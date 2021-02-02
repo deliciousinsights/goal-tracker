@@ -1,6 +1,6 @@
 // Journée d’historique
 // ====================
-
+//
 // Section de l'écran d’historique, dédiée à un jour précis.
 
 import Divider from '@mui/material/Divider'

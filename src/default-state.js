@@ -1,3 +1,6 @@
+// État par défaut (dev / test)
+// ============================
+
 import { subDays } from 'date-fns'
 
 import { isoDate } from './lib/helpers'

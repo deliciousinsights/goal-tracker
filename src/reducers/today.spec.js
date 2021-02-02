@@ -1,5 +1,5 @@
-// Date du jour (spec reducer)
-// ===========================
+// Date du jour (tests)
+// ====================
 
 import { isoDate } from '../lib/helpers'
 import reducer from './today'

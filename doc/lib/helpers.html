@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head><title>lib/helpers</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="lib/helpers"><meta name="groc-project-path" content="src/lib/helpers.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/lib/helpers.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { differenceInCalendarDays, formatISO } <span class="hljs-keyword">from</span> <span class="hljs-string">'date-fns'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h1 id="utilitaires">Utilitaires</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">const</span> FORMATTERS = {
+  full: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Intl</span>.DateTimeFormat(<span class="hljs-string">'fr-FR'</span>, {
+    weekday: <span class="hljs-string">'long'</span>,
+    day: <span class="hljs-string">'numeric'</span>,
+    month: <span class="hljs-string">'long'</span>,
+    year: <span class="hljs-string">'numeric'</span>,
+  }),
+  medium: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Intl</span>.DateTimeFormat(<span class="hljs-string">'fr-FR'</span>, {
+    day: <span class="hljs-string">'numeric'</span>,
+    month: <span class="hljs-string">'long'</span>,
+    year: <span class="hljs-string">'numeric'</span>,
+  }),
+}
+
+<span class="hljs-keyword">const</span> SPECIAL_FORMATS = [<span class="hljs-string">'Aujourd’hui'</span>, <span class="hljs-string">'Hier'</span>, <span class="hljs-string">'Avant-hier'</span>]</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Formatage de date de façon “pratique”.</p>
+<p>Si un format est passé (<code>String</code>), il est utilisé directement (c’est le cas
+pour le titre de <code>TrackerScreen</code> par exemple, qui utilise le code de format
+local semi-long <code>&#39;medium&#39;</code>), sinon on utilise des textes spéciaux pour
+aujourd’hui, hier et avant-hier, et des formats longs pour toute date autre.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">formatDate</span>(<span class="hljs-params">date, format, { refDate = new Date(</span>) } = </span>{}) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> date === <span class="hljs-string">'string'</span>) {
+    date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(date)
+  }
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> refDate === <span class="hljs-string">'string'</span>) {
+    refDate = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(refDate)
+  }
+  <span class="hljs-keyword">if</span> (format) {
+    <span class="hljs-keyword">return</span> FORMATTERS[format].format(date)
+  }
+  <span class="hljs-keyword">const</span> diff = differenceInCalendarDays(refDate, date)
+  <span class="hljs-keyword">return</span> SPECIAL_FORMATS[diff] || FORMATTERS.full.format(date)
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Calcule les totaux de progression et d’objectifs sur la journée, pour
+déterminer ensuite par exemple le taux global de progression, ou le retard
+potentiel (avec des données résultats permettant de l’affiche de façon
+explicite).</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getDayCounts</span>(<span class="hljs-params">todaysProgress, goals</span>) </span>{
+  <span class="hljs-keyword">let</span> [totalProgress, totalTarget] = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> { id, target } <span class="hljs-keyword">of</span> goals) {
+    totalProgress += todaysProgress[id] || <span class="hljs-number">0</span>
+    totalTarget += target
+  }
+
+  <span class="hljs-keyword">return</span> { totalProgress, totalTarget }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isoDate</span>(<span class="hljs-params">date</span>) </span>{
+  <span class="hljs-keyword">return</span> formatISO(date, { representation: <span class="hljs-string">'date'</span> })
+}</div></div></div></div></body></html>

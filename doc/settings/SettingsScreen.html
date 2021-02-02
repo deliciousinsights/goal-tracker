@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="en"><head><title>settings/SettingsScreen</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="settings/SettingsScreen"><meta name="groc-project-path" content="src/settings/SettingsScreen.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/settings/SettingsScreen.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="paramtres">Paramètres</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { Link } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-router-dom'</span>
+<span class="hljs-keyword">import</span> { useDispatch, useSelector } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-redux'</span>
+<span class="hljs-keyword">import</span> { useEffect, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+
+<span class="hljs-keyword">import</span> Add <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/icons-material/Add'</span>
+<span class="hljs-keyword">import</span> ArrowBack <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/icons-material/ArrowBack'</span>
+<span class="hljs-keyword">import</span> Button <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Button'</span>
+<span class="hljs-keyword">import</span> Card <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Card'</span>
+<span class="hljs-keyword">import</span> CardActions <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/CardActions'</span>
+<span class="hljs-keyword">import</span> CardContent <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/CardContent'</span>
+<span class="hljs-keyword">import</span> CardHeader <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/CardHeader'</span>
+<span class="hljs-keyword">import</span> Divider <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Divider'</span>
+<span class="hljs-keyword">import</span> IconButton <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/IconButton'</span>
+<span class="hljs-keyword">import</span> List <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/List'</span>
+<span class="hljs-keyword">import</span> ListItem <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/ListItem'</span>
+<span class="hljs-keyword">import</span> ListItemSecondaryAction <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/ListItemSecondaryAction'</span>
+<span class="hljs-keyword">import</span> ListItemText <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/ListItemText'</span>
+<span class="hljs-keyword">import</span> Logout <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/icons-material/ExitToApp'</span>
+<span class="hljs-keyword">import</span> Typography <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Typography'</span>
+
+<span class="hljs-keyword">import</span> { addGoal, removeGoal, updateGoal } <span class="hljs-keyword">from</span> <span class="hljs-string">'../reducers/goals'</span>
+<span class="hljs-keyword">import</span> AddSettingDialog <span class="hljs-keyword">from</span> <span class="hljs-string">'./AddSettingDialog'</span>
+<span class="hljs-keyword">import</span> DeleteSettingDialog <span class="hljs-keyword">from</span> <span class="hljs-string">'./DeleteSettingDialog'</span>
+<span class="hljs-keyword">import</span> GoalSetting <span class="hljs-keyword">from</span> <span class="hljs-string">'./GoalSetting'</span>
+<span class="hljs-keyword">import</span> { logOut } <span class="hljs-keyword">from</span> <span class="hljs-string">'../reducers/currentUser'</span>
+
+const DEFAULT_STATE = { goal: {}, dialog: null }
+
+export default function SettingsScreen() {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Au premier rendu, on ajuste le titre du document pour permettre un
+historique de navigation utilisable (et pas une tonne de titres
+identiques).  Le <a href="https://fr.reactjs.org/docs/hooks-reference.html#conditionally-firing-an-effect">deuxième
+argument</a>
+est le tableau de dépendances qui indique quand relancer l’effet : comme il
+est vide, seul le premier rendu du composant est concerné.</p></div></div><div class="code"><div class="wrapper">  useEffect(() =&gt; {
+    <span class="hljs-built_in">document</span>.title = <span class="hljs-string">'Mes paramètres'</span>
+  }, [])
+
+  <span class="hljs-keyword">const</span> [{ goal, dialog }, setState] = useState(DEFAULT_STATE)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On s’intéresse uniquement aux champs <code>goals</code> et <code>currentUser.email</code> de
+l’état global, qu’on veut retrouver dans nos propriétés sous les mêmes
+noms.  Par ricochet, seuls les changements apportés à ces champs
+entraîneront un éventuel <em>re-render</em> de notre conteneur.  La fonction
+<code>selectState</code>, qui va chercher ces infos, est plus bas dans le fichier.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">const</span> { goals, email } = useSelector(selectState)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Vu qu’on va solliciter le <em>store</em> pour déclencher la déconnexion ou
+manipuler les objectifs, on a besoin de <code>dispatch</code> afin de lui envoyer une
+action.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">const</span> dispatch = useDispatch()
+
+  <span class="hljs-keyword">return</span> (</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Quand on fait un bouton destiné à être en fait un lien, surtout au sein
+d’un <a href="https://reacttraining.com/react-router/web/api/Link"><code>&lt;Link&gt;</code></a>, on
+utilise la propriété
+<a href="https://material-ui.com/api/button/#props"><code>component</code></a> pour altérer le
+composant représentant la couche extérieure du bouton (en lieu et place
+de <code>button</code>).  Les <em>props</em> non utilisées par <code>Button</code> sont alors passées
+telles quelles à ce composant (ici la <em>prop</em> <code>to</code>).</p></div></div><div class="code"><div class="wrapper">    &lt;&gt;
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Button</span> <span class="hljs-attribute">component</span>=<span class="hljs-value">{Link}</span> <span class="hljs-attribute">startIcon</span>=<span class="hljs-value">{&lt;ArrowBack</span> /&gt;</span>} to='/' variant='text'&gt;
+        Retour
+      <span class="hljs-tag">&lt;/<span class="hljs-title">Button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Card</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">'settings'</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">CardHeader</span> <span class="hljs-attribute">title</span>=<span class="hljs-value">'Paramètres'</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">CardContent</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">List</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">ListItem</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">ListItemText</span>
+                <span class="hljs-attribute">primary</span>=<span class="hljs-value">'Vous êtes connecté-e en tant que'</span>
+                <span class="hljs-attribute">secondary</span>=<span class="hljs-value">{email}</span>
+              /&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">ListItemSecondaryAction</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">IconButton</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> dispatch(logOut())}&gt;
+                  <span class="hljs-tag">&lt;<span class="hljs-title">Logout</span> /&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-title">IconButton</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-title">ListItemSecondaryAction</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">ListItem</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-title">List</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">Divider</span> /&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">List</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">Typography</span> <span class="hljs-attribute">variant</span>=<span class="hljs-value">'subtitle1'</span>&gt;</span>Mes objectifs<span class="hljs-tag">&lt;/<span class="hljs-title">Typography</span>&gt;</span>
+            {goals.map((goal) =&gt; (
+              <span class="hljs-tag">&lt;<span class="hljs-title">GoalSetting</span>
+                <span class="hljs-attribute">goal</span>=<span class="hljs-value">{goal}</span>
+                <span class="hljs-attribute">key</span>=<span class="hljs-value">{goal.id}</span>
+                <span class="hljs-attribute">onDeleteClick</span>=<span class="hljs-value">{openGoalDeleter}</span>
+                <span class="hljs-attribute">onEditClick</span>=<span class="hljs-value">{openGoalEditor}</span>
+              /&gt;</span>
+            )</span>)}
+            {goals.length === <span class="hljs-number">0</span> &amp;&amp; (
+              <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ListItem</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">ListItemText</span> <span class="hljs-attribute">secondary</span>=<span class="hljs-value">'Aucun objectif pour le moment'</span> /&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-title">ListItem</span>&gt;</span>
+            )</span>}
+          &lt;<span class="hljs-regexp">/List&gt;
+        &lt;/</span>CardContent&gt;
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">CardActions</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">Button</span>
+            <span class="hljs-attribute">color</span>=<span class="hljs-value">'primary'</span>
+            <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{openGoalAdder}</span>
+            <span class="hljs-attribute">startIcon</span>=<span class="hljs-value">{&lt;Add</span> /&gt;</span>}
+            variant='contained'
+          &gt;
+            Ajouter un objectif
+          <span class="hljs-tag">&lt;/<span class="hljs-title">Button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-title">CardActions</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">Card</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">AddSettingDialog</span>
+        <span class="hljs-attribute">goal</span>=<span class="hljs-value">{goal}</span>
+        <span class="hljs-attribute">key</span>=<span class="hljs-value">{goal.id}</span>
+        <span class="hljs-attribute">onAdd</span>=<span class="hljs-value">{addOrUpdateGoal}</span>
+        <span class="hljs-attribute">onCancel</span>=<span class="hljs-value">{closeDialogs}</span>
+        <span class="hljs-attribute">onClosed</span>=<span class="hljs-value">{resetGoal}</span>
+        <span class="hljs-attribute">open</span>=<span class="hljs-value">{dialog</span> =<span class="hljs-value">==</span> '<span class="hljs-attribute">add-or-update</span>'}
+      /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">DeleteSettingDialog</span>
+        <span class="hljs-attribute">goal</span>=<span class="hljs-value">{goal}</span>
+        <span class="hljs-attribute">onCancel</span>=<span class="hljs-value">{closeDialogs}</span>
+        <span class="hljs-attribute">onClosed</span>=<span class="hljs-value">{resetGoal}</span>
+        <span class="hljs-attribute">onDelete</span>=<span class="hljs-value">{deleteSelectedGoal}</span>
+        <span class="hljs-attribute">open</span>=<span class="hljs-value">{dialog</span> =<span class="hljs-value">==</span> '<span class="hljs-attribute">delete</span>'}
+      /&gt;</span>
+    <span class="hljs-tag">&lt;/&gt;</span>
+  )</span>
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addOrUpdateGoal</span>(<span class="hljs-params">{ id, name, target, units, keepOpen }</span>) </span>{
+    <span class="hljs-keyword">if</span> (id !== <span class="hljs-literal">undefined</span>) {
+      dispatch(updateGoal({ id, name, target, units }))
+      keepOpen = <span class="hljs-literal">false</span>
+    } <span class="hljs-keyword">else</span> {
+      dispatch(addGoal({ name, target, units }))
+    }
+    <span class="hljs-keyword">if</span> (!keepOpen) {
+      closeDialogs()
+    }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">closeDialogs</span>(<span class="hljs-params"></span>) </span>{
+    setState({ goal, dialog: <span class="hljs-literal">null</span> })
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deleteSelectedGoal</span>(<span class="hljs-params"></span>) </span>{
+    dispatch(removeGoal({ id: goal.id }))
+    closeDialogs()
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">openGoalAdder</span>(<span class="hljs-params"></span>) </span>{
+    setState({ goal: {}, dialog: <span class="hljs-string">'add-or-update'</span> })
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">openGoalDeleter</span>(<span class="hljs-params">goal</span>) </span>{
+    setState({ goal, dialog: <span class="hljs-string">'delete'</span> })
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">openGoalEditor</span>(<span class="hljs-params">goal</span>) </span>{
+    setState({ goal, dialog: <span class="hljs-string">'add-or-update'</span> })
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">resetGoal</span>(<span class="hljs-params"></span>) </span>{
+    setState(DEFAULT_STATE)
+  }
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Fonction de sélection des valeurs utiles au composant au sein de l’état
+global applicatif géré par Redux.  L’argument est l’état global applicatif
+dans son intégralité, la valeur de retour sera celle renvoyée par le
+<a href="https://react-redux.js.org/api/hooks#useselector"><code>useSelector()</code></a> auquel on
+aura passé cette fonction.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">selectState</span>(<span class="hljs-params">{ goals, currentUser: { email } }</span>) </span>{
+  <span class="hljs-keyword">return</span> { goals, email }
+}</div></div></div></div></body></html>

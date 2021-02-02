@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="en"><head><title>auth/LoginScreen</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="auth/LoginScreen"><meta name="groc-project-path" content="src/auth/LoginScreen.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/auth/LoginScreen.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="cran-de-connexion">Écran de connexion</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-keyword">import</span> { useDispatch, useSelector } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-redux'</span>
+<span class="hljs-keyword">import</span> { useEffect, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+
+<span class="hljs-keyword">import</span> ArrowForward <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/icons-material/ArrowForward'</span>
+<span class="hljs-keyword">import</span> Button <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Button'</span>
+<span class="hljs-keyword">import</span> Card <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Card'</span>
+<span class="hljs-keyword">import</span> CardActions <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/CardActions'</span>
+<span class="hljs-keyword">import</span> CardContent <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/CardContent'</span>
+<span class="hljs-keyword">import</span> CardHeader <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/CardHeader'</span>
+<span class="hljs-keyword">import</span> Snackbar <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/Snackbar'</span>
+<span class="hljs-keyword">import</span> TextField <span class="hljs-keyword">from</span> <span class="hljs-string">'@mui/material/TextField'</span>
+
+<span class="hljs-keyword">import</span> classes <span class="hljs-keyword">from</span> <span class="hljs-string">'./LoginScreen.module.css'</span>
+<span class="hljs-keyword">import</span> { logIn } <span class="hljs-keyword">from</span> <span class="hljs-string">'../reducers/currentUser'</span>
+<span class="hljs-keyword">import</span> TogglablePasswordField <span class="hljs-keyword">from</span> <span class="hljs-string">'./TogglablePasswordField'</span>
+
+const MIN_PASSWORD_LENGTH = 6
+
+export default function LoginScreen() {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Au premier rendu, on ajuste le titre du document pour permettre un
+historique de navigation utilisable (et pas une tonne de titres
+identiques).  Le <a href="https://fr.reactjs.org/docs/hooks-reference.html#conditionally-firing-an-effect">deuxième
+argument</a>
+est le tableau de dépendances qui indique quand relancer l’effet : comme il
+est vide, seul le premier rendu du composant est concerné.</p></div></div><div class="code"><div class="wrapper">  useEffect(() =&gt; {
+    <span class="hljs-built_in">document</span>.title = <span class="hljs-string">'Identifiez-vous'</span>
+  }, [])</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On utilise des champs contrôlés pour les valeurs, afin de récupérer
+facilement leurs valeurs courantes dans le code de lancement de la
+connexion.  Il est important d’avoir une <code>String</code> comme valeur par défaut
+(par opposition à, disons, <code>undefined</code> ou <code>null</code>) afin que le champ soit
+contrôlé d’entrée de jeu.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">const</span> [email, setEmail] = useState(<span class="hljs-string">''</span>)
+  <span class="hljs-keyword">const</span> [password, setPassword] = useState(<span class="hljs-string">''</span>)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Récupération des infos qui nous intéressent depuis l’état global applicatif
+géré par Redux. En l’occurrence, seul <code>currentUser.loginState</code> nous
+intéresse.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">const</span> loginState = useSelector((state) =&gt; state.currentUser.loginState)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On définit quelques flags et éléments variables de notre UI suivant l’étape
+de login en cours : délogué, login en cours, login réussi, login échoué.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">const</span> loggingIn = loginState === <span class="hljs-string">'pending'</span>
+  <span class="hljs-keyword">const</span> logInIcon = loggingIn ? <span class="hljs-literal">null</span> : <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ArrowForward</span> /&gt;</span>
+  const canLogIn =
+    !loggingIn &amp;&amp; email !== '' &amp;&amp; password.trim().length &gt;= MIN_PASSWORD_LENGTH</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Vu qu’on va solliciter le <em>store</em> pour déclencher la connexion, on a besoin
+de <code>dispatch</code> afin de lui envoyer une action.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">const</span> dispatch = useDispatch()</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>En cas d’échec explicite, une
+<em><a href="https://material-ui.com/components/snackbars/">snackbar</a></em> apparaîtra 2s
+en bas de la fenêtre, pour nous signifier le souci.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">const</span> snackBar =
+    loginState === <span class="hljs-string">'failure'</span> ? (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Snackbar</span> <span class="hljs-attribute">message</span>=<span class="hljs-value">'Identifiant ou mot de passe invalide'</span> <span class="hljs-attribute">open</span> /&gt;</span>
+    )</span> : (
+      <span class="hljs-string">''</span>
+    )
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">form</span> <span class="hljs-attribute">onSubmit</span>=<span class="hljs-value">{handleSubmit}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Card</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{classes.loginScreen}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">CardHeader</span> <span class="hljs-attribute">title</span>=<span class="hljs-value">'Goal Tracker'</span> <span class="hljs-attribute">subheader</span>=<span class="hljs-value">'Connexion'</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">CardContent</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">TextField</span>
+            <span class="hljs-attribute">autoComplete</span>=<span class="hljs-value">'home email'</span>
+            <span class="hljs-attribute">fullWidth</span>
+            <span class="hljs-attribute">id</span>=<span class="hljs-value">'email'</span>
+            <span class="hljs-attribute">label</span>=<span class="hljs-value">'E-mail'</span>
+            <span class="hljs-attribute">margin</span>=<span class="hljs-value">'normal'</span>
+            <span class="hljs-attribute">name</span>=<span class="hljs-value">'email'</span>
+            <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{(event)</span> =&gt;</span> setEmail(normalizeEmail(event.target.value))}
+            placeholder='mon@email.tld'
+            required
+            type='email'
+            value={email}
+          /&gt;
+          <span class="hljs-tag">&lt;<span class="hljs-title">TogglablePasswordField</span>
+            <span class="hljs-attribute">autoComplete</span>=<span class="hljs-value">'current-password'</span>
+            <span class="hljs-attribute">fullWidth</span>
+            <span class="hljs-attribute">helperText</span>=<span class="hljs-value">{`${MIN_PASSWORD_LENGTH}</span> <span class="hljs-attribute">caract</span>è<span class="hljs-attribute">res</span> <span class="hljs-attribute">minimum</span>`}
+            <span class="hljs-attribute">id</span>=<span class="hljs-value">'password'</span>
+            <span class="hljs-attribute">label</span>=<span class="hljs-value">'Mot de passe'</span>
+            <span class="hljs-attribute">margin</span>=<span class="hljs-value">'normal'</span>
+            <span class="hljs-attribute">name</span>=<span class="hljs-value">'password'</span>
+            <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{(event)</span> =&gt;</span> setPassword(event.target.value)}
+            placeholder='super mot de passe'
+            required
+            value={password}
+          /&gt;
+        <span class="hljs-tag">&lt;/<span class="hljs-title">CardContent</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">CardActions</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">display:</span> '<span class="hljs-attribute">flex</span>', <span class="hljs-attribute">justifyContent:</span> '<span class="hljs-attribute">center</span>' }}&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">Button</span>
+            <span class="hljs-attribute">color</span>=<span class="hljs-value">'primary'</span>
+            <span class="hljs-attribute">disabled</span>=<span class="hljs-value">{!canLogIn}</span>
+            <span class="hljs-attribute">startIcon</span>=<span class="hljs-value">{logInIcon}</span>
+            <span class="hljs-attribute">type</span>=<span class="hljs-value">'submit'</span>
+            <span class="hljs-attribute">variant</span>=<span class="hljs-value">'contained'</span>
+          &gt;</span>
+            Connecte-toi
+          <span class="hljs-tag">&lt;/<span class="hljs-title">Button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-title">CardActions</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">Card</span>&gt;</span>
+      {snackBar}
+    <span class="hljs-tag">&lt;/<span class="hljs-title">form</span>&gt;</span>
+  )</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Gestionnaire d’envoi du formulaire, pour déclencher plutôt une connexion
+via appel API.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleSubmit</span>(<span class="hljs-params">event</span>) </span>{</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>On commence par empêcher le traitement par défaut de l&#39;événement
+<code>submit</code>, qui déclencherait un envoi du formulaire au serveur.  Et <strong>non,
+on n’utilise pas <code>return false</code></strong>, qui est une extension jQuery qui, en
+plus, appellerait stopPropagation(), ce qui n’est pas souhaitable (et ne
+marche pas sans jQuery).</p></div></div><div class="code"><div class="wrapper">    event.preventDefault()</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Hop, on sollicite le <em>store</em> Redux de façon appropriée, avec le bon
+<em>action creator</em>.</p></div></div><div class="code"><div class="wrapper">    dispatch(logIn({ email, password }))
+  }
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Petit utilitaire de normalisation d&#39;adresse e-mail, utilisé à la volée lors
+de la saisie (champ contrôlé).</p></div></div><div class="code"><div class="wrapper"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">normalizeEmail</span>(<span class="hljs-params">email</span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    email</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pas de whitespace !</p></div></div><div class="code"><div class="wrapper">      .replace(<span class="hljs-regexp">/\s+/g</span>, <span class="hljs-string">''</span>)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Normalisation minuscule avant le @</p></div></div><div class="code"><div class="wrapper">      .replace(<span class="hljs-regexp">/^[^@]+/</span>, (text) =&gt; text.toLowerCase())
+  )
+}</div></div></div></div></body></html>

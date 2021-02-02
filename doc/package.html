@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="en"><head><title>package</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="package"><meta name="groc-project-path" content="package.json"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path">package.json</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">{
+  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"goal-tracker"</span></span>,
+  "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"7.1.0"</span></span>,
+  "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+  "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Demo app used in Delicious Insights’ React PWA training course"</span></span>,
+  "<span class="hljs-attribute">author</span>": <span class="hljs-value"><span class="hljs-string">"Christophe Porteneuve &lt;christophe@delicious-insights.com&gt;"</span></span>,
+  "<span class="hljs-attribute">license</span>": <span class="hljs-value"><span class="hljs-string">"No-License (see LICENSE file)"</span></span>,
+  "<span class="hljs-attribute">scripts</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">build</span>": <span class="hljs-value"><span class="hljs-string">"react-scripts build"</span></span>,
+    "<span class="hljs-attribute">deploy</span>": <span class="hljs-value"><span class="hljs-string">"netlify deploy --prod"</span></span>,
+    "<span class="hljs-attribute">doc</span>": <span class="hljs-value"><span class="hljs-string">"rimraf doc &amp;&amp; npx groc"</span></span>,
+    "<span class="hljs-attribute">eject</span>": <span class="hljs-value"><span class="hljs-string">"react-scripts eject"</span></span>,
+    "<span class="hljs-attribute">start</span>": <span class="hljs-value"><span class="hljs-string">"react-scripts start"</span></span>,
+    "<span class="hljs-attribute">start:all</span>": <span class="hljs-value"><span class="hljs-string">"npm-run-all --parallel --print-label start start:api"</span></span>,
+    "<span class="hljs-attribute">start:api</span>": <span class="hljs-value"><span class="hljs-string">"node tools/dev-server.mjs"</span></span>,
+    "<span class="hljs-attribute">start:poll</span>": <span class="hljs-value"><span class="hljs-string">"cross-env CHOKIDAR_USEPOLLING=true npm start"</span></span>,
+    "<span class="hljs-attribute">test</span>": <span class="hljs-value"><span class="hljs-string">"react-scripts test"</span></span>,
+    "<span class="hljs-attribute">test:cov</span>": <span class="hljs-value"><span class="hljs-string">"npm test -- --coverage --watchAll"</span>
+  </span>}</span>,
+  "<span class="hljs-attribute">engines</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">node</span>": <span class="hljs-value"><span class="hljs-string">"&gt;= 14"</span></span>,
+    "<span class="hljs-attribute">npm</span>": <span class="hljs-value"><span class="hljs-string">"&gt;= 6"</span>
+  </span>}</span>,
+  "<span class="hljs-attribute">prettier</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">jsxSingleQuote</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+    "<span class="hljs-attribute">semi</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">singleQuote</span>": <span class="hljs-value"><span class="hljs-literal">true</span>
+  </span>}</span>,
+  "<span class="hljs-attribute">deliciousImportSort</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">customGroups</span>": <span class="hljs-value"><span class="hljs-string">"@mui"</span></span>,
+    "<span class="hljs-attribute">mainOrder</span>": <span class="hljs-value">[
+      <span class="hljs-string">"absolute"</span>,
+      <span class="hljs-string">"relative"</span>,
+      <span class="hljs-string">"bare"</span>
+    ]
+  </span>}</span>,
+  "<span class="hljs-attribute">importSort</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">.js</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">style</span>": <span class="hljs-value"><span class="hljs-string">"delicious"</span>
+    </span>}
+  </span>}</span>,
+  "<span class="hljs-attribute">eslintConfig</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">extends</span>": <span class="hljs-value">[
+      <span class="hljs-string">"react-app"</span>,
+      <span class="hljs-string">"react-app/jest"</span>,
+      <span class="hljs-string">"plugin:import/errors"</span>,
+      <span class="hljs-string">"plugin:import/warnings"</span>
+    ]</span>,
+    "<span class="hljs-attribute">rules</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">react/prop-types</span>": <span class="hljs-value"><span class="hljs-string">"warn"</span>
+    </span>}</span>,
+    "<span class="hljs-attribute">overrides</span>": <span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">files</span>": <span class="hljs-value">[
+          <span class="hljs-string">"src/**/*.stories.js"</span>
+        ]</span>,
+        "<span class="hljs-attribute">rules</span>": <span class="hljs-value">{
+          "<span class="hljs-attribute">import/no-anonymous-default-export</span>": <span class="hljs-value"><span class="hljs-string">"off"</span>
+        </span>}
+      </span>}
+    ]
+  </span>}</span>,
+  "<span class="hljs-attribute">jest</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">collectCoverageFrom</span>": <span class="hljs-value">[
+      <span class="hljs-string">"src/**/*.js"</span>
+    ]
+  </span>}</span>,
+  "<span class="hljs-attribute">browserslist</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">production</span>": <span class="hljs-value">[
+      <span class="hljs-string">"&gt;0.2%"</span>,
+      <span class="hljs-string">"not dead"</span>,
+      <span class="hljs-string">"not op_mini all"</span>
+    ]</span>,
+    "<span class="hljs-attribute">development</span>": <span class="hljs-value">[
+      <span class="hljs-string">"last 1 chrome version"</span>,
+      <span class="hljs-string">"last 1 firefox version"</span>,
+      <span class="hljs-string">"last 1 safari version"</span>
+    ]
+  </span>}</span>,
+  "<span class="hljs-attribute">dependencies</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">@emotion/react</span>": <span class="hljs-value"><span class="hljs-string">"^11.10.6"</span></span>,
+    "<span class="hljs-attribute">@emotion/styled</span>": <span class="hljs-value"><span class="hljs-string">"^11.10.6"</span></span>,
+    "<span class="hljs-attribute">@mui/icons-material</span>": <span class="hljs-value"><span class="hljs-string">"^5.11.9"</span></span>,
+    "<span class="hljs-attribute">@mui/material</span>": <span class="hljs-value"><span class="hljs-string">"^5.11.10"</span></span>,
+    "<span class="hljs-attribute">@redux-offline/redux-offline</span>": <span class="hljs-value"><span class="hljs-string">"^2.6.0"</span></span>,
+    "<span class="hljs-attribute">@reduxjs/toolkit</span>": <span class="hljs-value"><span class="hljs-string">"^1.9.3"</span></span>,
+    "<span class="hljs-attribute">airbnb-prop-types</span>": <span class="hljs-value"><span class="hljs-string">"^2.16.0"</span></span>,
+    "<span class="hljs-attribute">bson-objectid</span>": <span class="hljs-value"><span class="hljs-string">"^2.0.4"</span></span>,
+    "<span class="hljs-attribute">date-fns</span>": <span class="hljs-value"><span class="hljs-string">"^2.28.0"</span></span>,
+    "<span class="hljs-attribute">prop-types</span>": <span class="hljs-value"><span class="hljs-string">"^15.8.1"</span></span>,
+    "<span class="hljs-attribute">react</span>": <span class="hljs-value"><span class="hljs-string">"^18.2.0"</span></span>,
+    "<span class="hljs-attribute">react-dom</span>": <span class="hljs-value"><span class="hljs-string">"^18.2.0"</span></span>,
+    "<span class="hljs-attribute">react-redux</span>": <span class="hljs-value"><span class="hljs-string">"^8.0.5"</span></span>,
+    "<span class="hljs-attribute">react-router-dom</span>": <span class="hljs-value"><span class="hljs-string">"^6.8.1"</span></span>,
+    "<span class="hljs-attribute">react-scripts</span>": <span class="hljs-value"><span class="hljs-string">"^5.0.0"</span></span>,
+    "<span class="hljs-attribute">reduce-reducers</span>": <span class="hljs-value"><span class="hljs-string">"^1.0.4"</span></span>,
+    "<span class="hljs-attribute">redux</span>": <span class="hljs-value"><span class="hljs-string">"^4.2.1"</span></span>,
+    "<span class="hljs-attribute">web-vitals</span>": <span class="hljs-value"><span class="hljs-string">"^3.1.1"</span></span>,
+    "<span class="hljs-attribute">workbox-background-sync</span>": <span class="hljs-value"><span class="hljs-string">"^6.5.0"</span></span>,
+    "<span class="hljs-attribute">workbox-broadcast-update</span>": <span class="hljs-value"><span class="hljs-string">"^6.5.0"</span></span>,
+    "<span class="hljs-attribute">workbox-cacheable-response</span>": <span class="hljs-value"><span class="hljs-string">"^6.5.0"</span></span>,
+    "<span class="hljs-attribute">workbox-core</span>": <span class="hljs-value"><span class="hljs-string">"^6.5.0"</span></span>,
+    "<span class="hljs-attribute">workbox-expiration</span>": <span class="hljs-value"><span class="hljs-string">"^6.5.0"</span></span>,
+    "<span class="hljs-attribute">workbox-google-analytics</span>": <span class="hljs-value"><span class="hljs-string">"^6.5.0"</span></span>,
+    "<span class="hljs-attribute">workbox-navigation-preload</span>": <span class="hljs-value"><span class="hljs-string">"^6.5.0"</span></span>,
+    "<span class="hljs-attribute">workbox-precaching</span>": <span class="hljs-value"><span class="hljs-string">"^6.5.0"</span></span>,
+    "<span class="hljs-attribute">workbox-range-requests</span>": <span class="hljs-value"><span class="hljs-string">"^6.5.0"</span></span>,
+    "<span class="hljs-attribute">workbox-routing</span>": <span class="hljs-value"><span class="hljs-string">"^6.5.0"</span></span>,
+    "<span class="hljs-attribute">workbox-strategies</span>": <span class="hljs-value"><span class="hljs-string">"^6.5.0"</span></span>,
+    "<span class="hljs-attribute">workbox-streams</span>": <span class="hljs-value"><span class="hljs-string">"^6.5.0"</span>
+  </span>}</span>,
+  "<span class="hljs-attribute">devDependencies</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">@testing-library/dom</span>": <span class="hljs-value"><span class="hljs-string">"^9.0.0"</span></span>,
+    "<span class="hljs-attribute">@testing-library/jest-dom</span>": <span class="hljs-value"><span class="hljs-string">"^5.16.2"</span></span>,
+    "<span class="hljs-attribute">@testing-library/react</span>": <span class="hljs-value"><span class="hljs-string">"^14.0.0"</span></span>,
+    "<span class="hljs-attribute">@testing-library/user-event</span>": <span class="hljs-value"><span class="hljs-string">"^14.4.3"</span></span>,
+    "<span class="hljs-attribute">body-parser</span>": <span class="hljs-value"><span class="hljs-string">"^1.20.2"</span></span>,
+    "<span class="hljs-attribute">chalk-template</span>": <span class="hljs-value"><span class="hljs-string">"^0.5.0"</span></span>,
+    "<span class="hljs-attribute">cors</span>": <span class="hljs-value"><span class="hljs-string">"^2.8.5"</span></span>,
+    "<span class="hljs-attribute">cross-env</span>": <span class="hljs-value"><span class="hljs-string">"^7.0.2"</span></span>,
+    "<span class="hljs-attribute">express</span>": <span class="hljs-value"><span class="hljs-string">"^4.17.3"</span></span>,
+    "<span class="hljs-attribute">import-sort-parser-babylon</span>": <span class="hljs-value"><span class="hljs-string">"^6.0.0"</span></span>,
+    "<span class="hljs-attribute">import-sort-style-delicious</span>": <span class="hljs-value"><span class="hljs-string">"^1.0.2"</span></span>,
+    "<span class="hljs-attribute">morgan</span>": <span class="hljs-value"><span class="hljs-string">"^1.10.0"</span></span>,
+    "<span class="hljs-attribute">npm-run-all</span>": <span class="hljs-value"><span class="hljs-string">"^4.1.5"</span></span>,
+    "<span class="hljs-attribute">redux-devtools-extension</span>": <span class="hljs-value"><span class="hljs-string">"^2.13.9"</span>
+  </span>}
+</span>}</div></div></div></div></body></html>
