@@ -1,0 +1,17 @@
+# Configuration du déploiement sur Netlify
+
+[build]
+  # Si on passait en mode CD, on laisserait Netlify faire le build. Ici ce n'est
+  # pas le cas pour notre démo, mais ça ne mange pas de pain de prévoir…
+  base = "."
+  command = "npm run build"
+  # La sortie de build, donc les fichiers à publier / distribuer.
+  publish = "build/"
+
+# Vu que le routeur est côté client, toute URL profonde qui ne correspond à
+# aucun fichier doit être servie en 200 avec le `index.html` de base, pour que
+# le routeur reprenne la main ensuite.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

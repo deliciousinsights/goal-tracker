@@ -7,6 +7,7 @@
   "license": "No-License (see LICENSE file)",
   "scripts": {
     "build": "react-scripts build",
+    "deploy": "netlify deploy --prod",
     "eject": "react-scripts eject",
     "start": "react-scripts start",
     "start:all": "npm-run-all --parallel --print-label start start:api",
