@@ -34,14 +34,48 @@ describe('<GoalTrackerWidget />', () => {
       }
     )
 
-    it.todo('should trigger its onProgress on click')
+    it('should trigger its onProgress on click', async () => {
+      const progress = 21
+      const onProgress = jest.fn()
+      render(
+        <GoalTrackerWidget
+          goal={goal}
+          onProgress={onProgress}
+          progress={progress}
+        />
+      )
 
-    it.todo('should otherwise match the expected snapshot')
+      await userEvent.click(screen.getByRole('button'))
+      expect(onProgress).toHaveBeenCalledTimes(1)
+      expect(onProgress).toHaveBeenCalledWith(goal)
+    })
+
+    it('should otherwise match the expected snapshot', () => {
+      const { container } = render(
+        <GoalTrackerWidget goal={goal} progress={21} />
+      )
+
+      expect(container).toMatchSnapshot()
+    })
   })
 
   describe('when completed (or exceeded)', () => {
-    it.todo('should render appropriately')
+    it.each([goal.target, goal.target + 1, goal.target + 10])(
+      'should render appropriately at progress %i',
+      (progress) => {
+        render(<GoalTrackerWidget goal={goal} progress={progress} />)
 
-    it.todo('should otherwise match the expected snapshot')
+        expect(screen.queryByTestId('in-progress')).not.toBeInTheDocument()
+        expect(screen.getByTestId('completed')).toBeInTheDocument()
+      }
+    )
+
+    it('should otherwise match the expected snapshot', () => {
+      const { container } = render(
+        <GoalTrackerWidget goal={goal} progress={42} />
+      )
+
+      expect(container).toMatchSnapshot()
+    })
   })
 })

@@ -8,12 +8,19 @@ import { func, GoalPropType, nonNegativeInteger } from '../shared/prop-types'
 import Gauge from '../shared/Gauge'
 
 export default function GoalTrackerWidget({
+  goal,
   goal: { name, units, target },
+  onProgress,
   progress,
 }) {
   const adderComponent =
     target > progress ? (
-      <Fab color='secondary' size='small' aria-label={`Progresser sur ${name}`}>
+      <Fab
+        color='secondary'
+        size='small'
+        aria-label={`Progresser sur ${name}`}
+        onClick={() => onProgress?.(goal)}
+      >
         <Add data-testid='in-progress' />
       </Fab>
     ) : (
