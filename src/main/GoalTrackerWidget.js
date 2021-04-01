@@ -14,11 +14,11 @@ export default function GoalTrackerWidget({
   const adderComponent =
     target > progress ? (
       <Fab color='secondary' size='small'>
-        <Add />
+        <Add data-testid='in-progress' />
       </Fab>
     ) : (
       <Fab disabled size='small'>
-        <ThumbUp />
+        <ThumbUp data-testid='completed' />
       </Fab>
     )
 
