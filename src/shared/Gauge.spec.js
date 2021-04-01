@@ -11,7 +11,17 @@ describe('<Gauge />', () => {
     expect(progressBar).toHaveAttribute('aria-valuenow', '50')
   })
 
-  it.todo('should normalize value on custom max')
+  it('should normalize value on custom max', () => {
+    render(<Gauge value={20} max={80} />)
+    expect(screen.getByRole('progressbar')).toHaveAttribute(
+      'aria-valuenow',
+      '25'
+    )
+  })
 
-  it.todo('should otherwise match the expected snapshot')
+  it('should otherwise match the expected snapshot', () => {
+    const { container } = render(<Gauge value={50} />)
+
+    expect(container).toMatchSnapshot()
+  })
 })
